@@ -69,10 +69,10 @@ run_no_args: $(TARGET)
 	@./$(TARGET)
 
 $(CSAN_TOOLS): $(TARGET) 
-	compute-sanitizer --tool $@ --show-backtrace=yes --log-file $(TEST_DIR)/$@.log ./$(TARGET) -t
+	@compute-sanitizer --tool $@ --show-backtrace=yes --log-file $(TEST_DIR)/$@.log ./$(TARGET) -t
 
 ncu: $(TARGET)
-	ncu ./$(TARGET) -t
+	@ncu ./$(TARGET) -t
 
 doxygen:
 	doxygen Doxyfile

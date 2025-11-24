@@ -30,13 +30,14 @@ struct FilterParams {
     float sigmaNormal = .1;
 
     bool cacheTile = false;
+    bool tileOutput = false;
 };
 
 
-CUDA_CPU_FUNC int tileByteCount(FilterParams params, uint2 blockShape);
+CUDA_CPU_FUNC int tileByteCount(int radius, int level, int2 blockShape);
 
-KERNEL      void filterKernel       (GBuffer frame, FilterParams params);
-CUDA_FUNC   void singleLevelFilter  (uchar4* in, uchar4* out, uchar4* tile, const GBuffer frame, const FilterParams params);
-CUDA_FUNC   void cacheTile          (uchar4* tile, const uchar4* in, const int2 frameShape, const int2 start, const int2 end);
+KERNEL      void filterKernel           (GBuffer frame, FilterParams params);
+CUDA_FUNC   void singleLevelFilter      (uchar4* in, uchar4* out, int level, uchar4* tile, const GBuffer frame, const FilterParams params);
+CUDA_FUNC   void cacheTile              (uchar4* tile, const uchar4* in, const int2 frameShape, const int2 start, const int2 end);
 
 #endif

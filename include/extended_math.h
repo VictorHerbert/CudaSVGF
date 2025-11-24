@@ -28,7 +28,7 @@ inline CUDA_CPU_FUNC float3 operator*(const uchar3 &v, const float &f) {
 }
 
 template<typename T>
-inline CUDA_CPU_FUNC float3 make_float3(const T &v){
+CUDA_CPU_FUNC float3 make_float3(const T v){
     return make_float3(v.x, v.y, v.z);
 }
 

@@ -27,8 +27,9 @@ __device__ void printMemInfo(uchar4* ptr, int2 grid = {0,0}) {
     }
 }
 
-CUDA_CPU_FUNC int tileByteCount(FilterParams params, uint2 blockShape){
-    return 4*(2*params.radius + blockShape.x)*(2*params.radius + blockShape.y);
+CUDA_CPU_FUNC int tileByteCount(int radius, int level, int2 blockShape){
+    int halo = radius * (1<<level);
+    return 4*(2*halo + blockShape.x)*(2*halo + blockShape.y);
 }
 
 CUDA_FUNC void cacheTile(uchar4* tile, const uchar4* in, const int2 frameShape, const int2 start, const int2 end){
@@ -79,32 +80,11 @@ KERNEL void filterKernel(GBuffer frame, FilterParams params){
     for(int level = 0; level < params.depth; level++){
         uchar4* in = (level == 0) ? frame.render : frame.buffer[level%2];
         uchar4* out = (level == (params.depth - 1)) ? frame.denoised : frame.buffer[(level+1)%2];
-        singleLevelFilter(in, out, renderTile, frame, params);
+        singleLevelFilter(in, out, level, renderTile, frame, params);
     }
 }
 
-
-/*CUDA_FUNC float normalLenght(float3 v){
-    return length(v/255.0);
-}
-
-CUDA_FUNC float waveletWeight(int2 pos, int2 n, int2 d, const Pixel* in, const Framebuffer& frame, const FilterParams params){
-    float3 dCol = make_float3(in[flattenIndex(pos, frame.shape)] - in[flattenIndex(n, frame.shape)]);
-    float wCol = normalLenght(dCol)/params.sigmaColor;
-
-    float3 dAlbedo = make_float3(frame.albedo[flattenIndex(pos, frame.shape)] - frame.albedo[flattenIndex(n, frame.shape)]);
-    float wAlbedo = normalLenght(dAlbedo)/params.sigmaAlbedo;
-
-    float dNormal = min(0.0, dot(frame.normal[flattenIndex(pos, frame.shape)], frame.normal[flattenIndex(n, frame.shape)]));
-    float wNormal = dNormal/params.sigmaNormal;
-
-    float wSpace = length(make_float2(d))/params.sigmaSpace;
-    float wWavelet = waveletSpline[abs(d.x)]*waveletSpline[(abs(d.y))];
-
-    return wWavelet*exp(-wCol-wSpace-wAlbedo-wNormal);
-}*/
-
-CUDA_FUNC void singleLevelFilter(uchar4* in, uchar4* out, uchar4* tile, const GBuffer frame, const FilterParams params){
+CUDA_FUNC void singleLevelFilter(uchar4* in, uchar4* out, int level, uchar4* tile, const GBuffer frame, const FilterParams params){
     int2 posInFrame = {
         blockIdx.x * blockDim.x + threadIdx.x,
         blockIdx.y * blockDim.y + threadIdx.y
@@ -132,7 +112,7 @@ CUDA_FUNC void singleLevelFilter(uchar4* in, uchar4* out, uchar4* tile, const GB
 
     for(dPos.x = -params.radius; dPos.x <= params.radius; dPos.x++){
         for(dPos.y = -params.radius; dPos.y <= params.radius; dPos.y++){
-            int2 nPosInFrame = posInFrame + dPos;
+            int2 nPosInFrame = posInFrame + dPos * (1<<level);
 
             if(!inRange(nPosInFrame, frame.shape))
                 continue;
