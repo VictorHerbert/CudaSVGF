@@ -9,150 +9,167 @@
 
 __constant__ float waveletSpline[3] = {3.0/8.0, 1.0/4.0, 1.0/16.0};
 
+__device__ void printMemInfo(uchar4* ptr, int2 grid = {0,0}) {
+    unsigned int threadId = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int lane = threadId % 32;
 
-KERNEL void filterKernelBaseline(GBuffer frame, const FilterParams params){
-    int2 pos = {
-        blockIdx.x * blockDim.x + threadIdx.x,
-        blockIdx.y * blockDim.y + threadIdx.y
-    };
+    uintptr_t address = reinterpret_cast<uintptr_t>(ptr);
+    unsigned long long int wordAddress = static_cast<unsigned int>(address >> 2);
+    unsigned long long int bank = wordAddress % 32;
 
-    int2 blockShape = { blockDim.x, blockDim.y };
-    int2 blockPos   = { threadIdx.x, threadIdx.y };
-    int2 halo       = { params.radius, params.radius };
-
-    for(int level = 0; level < params.depth; level++){
-        uchar4* in = (level == 0) ? frame.render : frame.buffer[level%2];
-        uchar4* out = (level == (params.depth - 1)) ? frame.denoised : frame.buffer[(level+1)%2];
-
-        if(pos.x >= frame.shape.x || pos.y >= frame.shape.y)
-            continue;
-
-        float3 acum = {0, 0, 0};
-        float norm = 0;
-
-        int2 d;
-        for(d.x = -params.radius; d.x <= params.radius; d.x++){
-            for(d.y = -params.radius; d.y <= params.radius; d.y++){
-                int2 nPos = pos + d;
-
-                if(!inRange(nPos, frame.shape))
-                    continue;
-
-                float w = 1;
-                uchar4 mem = in[flattenIndex(nPos, frame.shape)];
-                acum.x += w*mem.x;
-                acum.y += w*mem.y;
-                acum.z += w*mem.z;
-                norm += w;                       
-            }
-        }
-        acum /= norm;
-        uchar4 mem;
-        mem.x = (unsigned char) acum.x;
-        mem.y = (unsigned char) acum.x;
-        mem.z = (unsigned char) acum.x;
-        out[flattenIndex(pos, frame.shape)] = mem;
-
-        __syncthreads();
+    if(blockIdx.x == grid.x && blockIdx.y == grid.y){
+        printf("Tid %3u | Lane %2u | Addr 0x%llx | WordAddr 0x%x | Bank %2u\n",
+           threadId,
+           lane,
+           static_cast<unsigned long long>(address),
+           wordAddress,
+           bank);
     }
 }
 
-CUDA_FUNC void cacheTile(uchar4* tile, uchar4* in, int2 shape, int radius){
+CUDA_CPU_FUNC int tileByteCount(FilterParams params, uint2 blockShape){
+    return 4*(2*params.radius + blockShape.x)*(2*params.radius + blockShape.y);
+}
+
+CUDA_FUNC void cacheTile(uchar4* tile, const uchar4* in, const int2 frameShape, const int2 start, const int2 end){
     int2 gridPos    = { blockIdx.x, blockIdx.y };
     int2 blockShape = { blockDim.x, blockDim.y };
     int2 blockPos   = { threadIdx.x, threadIdx.y };
-    int2 halo       = { radius, radius };
+    int threadId = threadIdx.y * blockDim.x + threadIdx.x;
+    int laneId = threadId%32;
+    int warpId = threadId/32;
 
-    int2 tileSize = blockShape + 2 * halo;
-    tileSize.x = (tileSize.x + blockShape.x-1) & ~(blockShape.x-1);
-    int totalTileSize = tileSize.x * tileSize.y;
+    int2 tileShape = end - start;
+    int startLine = start.x/32;
+    int linesPerRow = (end.x + 1)/32 - startLine;
+    int warpsPerBlock = totalSize(blockShape)/32;
+    int tileLineCount = linesPerRow * (end.y - start.y);
 
-    int threadId = blockPos.y * blockShape.x + blockPos.x;
 
-    for (int idx = threadId; idx < totalTileSize; idx += blockShape.x * blockShape.y) {
-        int2 tilePos = { idx % tileSize.x, idx / tileSize.x };
+    /*for (int idx = threadId; idx < totalTileSize; idx += blockShape.x * blockShape.y) {
+        int2 tilePos = { idx % tileShape.x, idx / tileSize.x };
 
         int2 framePos = gridPos * blockShape + tilePos - halo;
 
         if (inRange(framePos, shape)){
             int frameIdx = flattenIndex(framePos, shape);
-
             tile[idx] = in[frameIdx];
         }
+    }*/
+
+    for(int warpOffset = 0; warpOffset < tileLineCount; warpOffset += warpsPerBlock){
+        int nWarpId = warpId + warpOffset;
+        int2 posInFrame = {
+            startLine*32 + 32*(warpId%linesPerRow) + laneId,
+            nWarpId/linesPerRow + start.y
+        };
+
+        int2 posInTile = posInFrame - start;
+
+        reinterpret_cast<int&>(tile[flattenIndex(posInTile, tileShape)]) =
+            reinterpret_cast<const int&>(in[flattenIndex(posInFrame, frameShape)]);
     }
 
     __syncthreads();
 }
 
-KERNEL void filterKernelTiled(GBuffer frame, const FilterParams params){
-    int2 pos = {
-        blockIdx.x * blockDim.x + threadIdx.x,
-        blockIdx.y * blockDim.y + threadIdx.y
-    };
-
-    int2 blockShape = { blockDim.x, blockDim.y };
-    int2 blockPos   = { threadIdx.x, threadIdx.y };
-    int2 halo       = { params.radius, params.radius };
-
-    int2 tileShape = blockShape + 2*halo;
-    int tileSize = totalSize(tileShape);
-
-    extern __shared__ uchar4 tile[];
-    uchar4 *renderTile = tile;
+KERNEL void filterKernel(GBuffer frame, FilterParams params){
+    extern __shared__ uchar4 renderTile[];
 
     for(int level = 0; level < params.depth; level++){
         uchar4* in = (level == 0) ? frame.render : frame.buffer[level%2];
         uchar4* out = (level == (params.depth - 1)) ? frame.denoised : frame.buffer[(level+1)%2];
-
-        if(params.cacheInput)
-            cacheTile(renderTile, in, frame.shape, params.radius);
-
-        if(pos.x >= frame.shape.x || pos.y >= frame.shape.y)
-            continue;
-
-        int2 blockPos   = { threadIdx.x, threadIdx.y };
-
-        float3 acum = {0, 0, 0};
-        float norm = 0;
-        int2 d;
-
-        for(d.x = -params.radius; d.x <= params.radius; d.x++){
-            for(d.y = -params.radius; d.y <= params.radius; d.y++){
-                int2 nPos = pos + d;
-                int2 nTilePos = blockPos + halo + d;
-
-                if(!inRange(nPos, frame.shape))
-                    continue;
-
-                float w = 1;
-                uchar4 memCache;
-                if(params.cacheInput)
-                    memCache = *(uchar4*)(&renderTile[flattenIndex(nTilePos, tileShape)]);
-                else
-                    memCache = *(uchar4*)(&in[flattenIndex(nPos, frame.shape)]);
-
-
-                unsigned int threadId = blockPos.y * blockShape.x + blockPos.x;
-                unsigned int address = (int)&renderTile[flattenIndex(nTilePos, tileShape)];
-                unsigned int wordAddress = address/4;
-                unsigned int bank = wordAddress%32;
-                unsigned int lane = threadId%32;
-                //printf("Tid %3d | Lane %2d | Addr 0x%x | WordAddr 0x%x | Bank %2d\n", threadId, lane, address, wordAddress, bank);
-
-                acum.x += w*memCache.x;
-                acum.y += w*memCache.y;
-                acum.z += w*memCache.z;
-
-                norm += w;
-            }
-        }
-        acum /= norm;
-
-        out[flattenIndex(pos, frame.shape)] = {
-            static_cast<unsigned char>(acum.x),
-            static_cast<unsigned char>(acum.y),
-            static_cast<unsigned char>(acum.z),
-        };
-        __syncthreads();
+        singleLevelFilter(in, out, renderTile, frame, params);
     }
+}
+
+
+/*CUDA_FUNC float normalLenght(float3 v){
+    return length(v/255.0);
+}
+
+CUDA_FUNC float waveletWeight(int2 pos, int2 n, int2 d, const Pixel* in, const Framebuffer& frame, const FilterParams params){
+    float3 dCol = make_float3(in[flattenIndex(pos, frame.shape)] - in[flattenIndex(n, frame.shape)]);
+    float wCol = normalLenght(dCol)/params.sigmaColor;
+
+    float3 dAlbedo = make_float3(frame.albedo[flattenIndex(pos, frame.shape)] - frame.albedo[flattenIndex(n, frame.shape)]);
+    float wAlbedo = normalLenght(dAlbedo)/params.sigmaAlbedo;
+
+    float dNormal = min(0.0, dot(frame.normal[flattenIndex(pos, frame.shape)], frame.normal[flattenIndex(n, frame.shape)]));
+    float wNormal = dNormal/params.sigmaNormal;
+
+    float wSpace = length(make_float2(d))/params.sigmaSpace;
+    float wWavelet = waveletSpline[abs(d.x)]*waveletSpline[(abs(d.y))];
+
+    return wWavelet*exp(-wCol-wSpace-wAlbedo-wNormal);
+}*/
+
+CUDA_FUNC void singleLevelFilter(uchar4* in, uchar4* out, uchar4* tile, const GBuffer frame, const FilterParams params){
+    int2 posInFrame = {
+        blockIdx.x * blockDim.x + threadIdx.x,
+        blockIdx.y * blockDim.y + threadIdx.y
+    };
+
+    int2 gridPos    = {blockIdx.x, blockIdx.y};
+    int2 blockShape = {blockDim.x, blockDim.y};
+    int2 blockPos   = {threadIdx.x, threadIdx.y};
+    int2 halo       = {params.radius, params.radius};
+
+    /*if(params.cacheTile){
+        int2 startPos = gridPos * blockShape;
+        int2 endPos = startPos + blockShape;
+        cacheTile(tile, in, frame.shape, startPos, endPos);
+    }*/
+
+    if(posInFrame.x >= frame.shape.x || posInFrame.y >= frame.shape.y)
+        return;
+
+    float3 acum = {0, 0, 0};
+    float norm = 0;
+    int2 dPos;
+
+    float3 refRender = make_float3(in[flattenIndex(posInFrame, frame.shape)]);
+
+    for(dPos.x = -params.radius; dPos.x <= params.radius; dPos.x++){
+        for(dPos.y = -params.radius; dPos.y <= params.radius; dPos.y++){
+            int2 nPosInFrame = posInFrame + dPos;
+
+            if(!inRange(nPosInFrame, frame.shape))
+                continue;
+            
+            float dSum = 0;
+            float3 nRender = make_float3(in[flattenIndex(nPosInFrame, frame.shape)]);
+
+            if(params.type & FilterParams::SPATIAL){
+                float dSpace = length(make_float2(dPos));
+                dSum += dSpace/params.sigmaSpace;
+            }
+            if(params.type & FilterParams::RENDER){
+                float dRender = length(refRender - nRender);
+                dSum += dRender/params.sigmaSpace;
+            }
+            if(params.type & FilterParams::ALBEDO){
+                float3 refAlbedo = make_float3(frame.albedo[flattenIndex(posInFrame, frame.shape)]);
+                float3 nAlbedo = make_float3(frame.albedo[flattenIndex(nPosInFrame, frame.shape)]);
+                float dAlbedo = length(refAlbedo - nAlbedo);
+                dSum += dAlbedo/params.sigmaSpace;
+            }
+            if(params.type & FilterParams::NORMAL){
+                float3 refNormal = make_float3(frame.normal[flattenIndex(posInFrame, frame.shape)]);
+                float3 nNormal = make_float3(frame.normal[flattenIndex(nPosInFrame, frame.shape)]);
+                float dAlbedo = length(refNormal - nNormal);
+                dSum += dAlbedo/params.sigmaSpace;
+            }
+
+            float w = exp(-dSum);
+            acum += w*nRender;
+            norm += w;
+        }
+    }
+    acum /= norm;    
+
+    // TODO make sure it load an int instead of 4x load char
+    out[flattenIndex(posInFrame, frame.shape)] = make_uchar4(acum);
+
+    __syncthreads();
 }

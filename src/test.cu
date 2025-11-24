@@ -47,6 +47,12 @@ void test(std::string wildcard) {
     }
 }
 
+// --------------------------------------------------------------------------------------------------------------
+
+int2 shape =  {1920, 1080};
+CudaGBuffer frame(shape);
+
+// --------------------------------------------------------------------------------------------------------------
 
 SKIP(DEVICE_STATS){
     printGPUProperties();
@@ -60,31 +66,52 @@ SKIP(IMAGE){
     image4.save(OUTPUT_PATH + "image_open_save4.png");
 }
 
+// --------------------------------------------------------------------------------------------------------------
 
-int2 shape =  {1920, 1080};
-CudaVector<uchar4> in(totalSize(shape));
-CudaVector<uchar4> out(totalSize(shape));
+KERNEL void test_cache_tile(uchar4 *in){
+    extern __shared__ uchar4 tile[];
+    int2 start = {blockIdx.x * blockDim.x, blockIdx.y * blockDim.y};
+    int2 end = {(blockIdx.x+1) * blockDim.x, (blockIdx.y+1) * blockDim.y};
+    cacheTile(tile, in, {1920, 1080}, start, end);
+}
 
-TEST(FILTER_BASELINE){
-
-    dim3 blockSize(16,16);
+SKIP(CACHE_TILE){
+    dim3 blockSize(32,8);
     dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
 
-    filterKernelBaseline<<<gridSize, blockSize, 49152>>>(
-        {.shape=shape, .render=in.data(), .denoised=out.data()},
-        {.type=FilterParams::AVERAGE, .depth=1, .radius=2});
-
+    test_cache_tile<<<gridSize, blockSize, 30*1024>>>(frame.render);
     cudaDeviceSynchronize();
 }
 
 
-TEST(FILTER_TILED){
-    dim3 blockSize(16,16);
+// --------------------------------------------------------------------------------------------------------------
+
+TEST(FILTER_LEVEL){
+    dim3 blockSize(32,8);
     dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
 
-    filterKernelTiled<<<gridSize, blockSize, 30*1024>>>(
-        {.shape=shape, .render=in.data(), .denoised=out.data()},
-        {.type=FilterParams::AVERAGE, .depth=1, .radius=2});
-
+    test_cache_tile<<<gridSize, blockSize, 30*1024>>>(frame.render);
     cudaDeviceSynchronize();
+}
+
+// --------------------------------------------------------------------------------------------------------------
+
+TEST(FILTER){
+    dim3 blockSize(32,8);
+    dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+    
+    FilterParams params = {
+        .type = FilterParams::AVERAGE,
+        .depth=1};
+    
+    int bytecount;
+    bytecount = tileByteCount(params, {blockSize.x, blockSize.y});
+
+    filterKernel<<<gridSize, blockSize>>>(frame, params);
+    cudaDeviceSynchronize();
+
+    //params.cacheTile = true;
+    //bytecount = byteCountTile(params, {blockSize.x, blockSize.y});
+    //filterKernel<<<gridSize, blockSize, 20*1024>>>(frame, params);
+    //cudaDeviceSynchronize();
 }

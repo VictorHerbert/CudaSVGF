@@ -24,7 +24,7 @@ struct CudaGBuffer : GBuffer {
     uchar4* denoisedCPU;
 
     CudaGBuffer(){};
-    ~CudaGBuffer();
+    //~CudaGBuffer();
     CudaGBuffer (int2 shape);
 
     void allocate(int2 shape);

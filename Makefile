@@ -5,8 +5,10 @@
 NVCC = nvcc
 CXX = $(NVCC)
 
-CXXFLAGS_LK = -w -G -g -O3 -std=c++17 -arch=sm_75 -I./include
+CXXFLAGS_LK = -w -G -g -O3 -rdc=true -std=c++17 -arch=sm_75 -I./include
 CXXFLAGS = $(CXXFLAGS_LK) -dc
+
+CSAN_TOOLS := memcheck racecheck synccheck initcheck
 
 MKDIR = mkdir
 RM = rm
@@ -17,6 +19,7 @@ RM = rm
 
 SRC_DIR     = src
 BUILD_DIR   = build
+TEST_DIR   	= test
 INCLUDE_DIR = include
 
 # ===========================================================================
@@ -45,14 +48,15 @@ $(TARGET): $(OBJ)
 	@$(NVCC) $(CXXFLAGS_LK) -o $@ $^ $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@echo "Recompiling $< into $@"
+	@printf "Recompiling %-15s into %s\n" "$<" "$@"
 	@$(NVCC) $(CXXFLAGS) -M -MT $@ $< > $(BUILD_DIR)/$*.d
 	@$(NVCC) $(CXXFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cu
-	@echo "Recompiling $< into $@"
+	@printf "Recompiling %-15s into %s\n" "$<" "$@"
 	@$(NVCC) $(CXXFLAGS) -M -MT $@ $< > $(BUILD_DIR)/$*.d
 	@$(NVCC) $(CXXFLAGS) -c $< -o $@
+
 
 # ===========================================================================
 #                                 Tasks
@@ -64,15 +68,18 @@ test: $(TARGET)
 run_no_args: $(TARGET)
 	@./$(TARGET)
 
-memcheck: $(TARGET)
-	compute-sanitizer --tool memcheck --show-backtrace=yes --log-file $(BUILD_DIR)/memcheck.log ./$(TARGET) -t
+$(CSAN_TOOLS): $(TARGET) 
+	compute-sanitizer --tool $@ --show-backtrace=yes --log-file $(TEST_DIR)/$@.log ./$(TARGET) -t
+
+ncu: $(TARGET)
+	ncu ./$(TARGET) -t
 
 doxygen:
 	doxygen Doxyfile
 
 all: memcheck doxygen
 
-.PHONY: all clean test
+.PHONY: test $(CSAN_TOOLS) ncu doxygen
 
 # ===========================================================================
 #                                  Clean

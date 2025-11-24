@@ -77,6 +77,14 @@ public:
     size_t size() const;
 
     /**
+     * Resizes the device buffer. Existing contents are preserved up to
+     * the minimum of the old and new sizes.
+     * @param size New size
+     */
+    void resize(size_t size);
+
+
+    /**
      * @brief Copies data from a host pointer into the device buffer.
      * @param v Host pointer containing the source data.
      * @param size Number of elements to copy.
@@ -137,6 +145,14 @@ const T* CudaVector<T>::data() const {return data_p;}
 
 template <typename T>
 size_t CudaVector<T>::size() const {return size_p;}
+
+template <typename T>
+void CudaVector<T>::resize(size_t newSize) {
+    if (data_p)
+        cudaFree(data_p);
+    cudaMalloc(&data_p, newSize * sizeof(T));
+    size_p = newSize;
+}
 
 template <typename T>
 void CudaVector<T>::copyFrom(T* v, size_t size) {
