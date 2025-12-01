@@ -19,12 +19,24 @@ inline CUDA_CPU_FUNC float dot(const uchar3 &a, const uchar3 &b) {
            float(a.z) * float(b.z);
 }
 
-inline CUDA_CPU_FUNC float3 operator*(const float &f, const uchar3 &v) {
+inline CUDA_CPU_FUNC float3 operator * (const float &f, const uchar3 &v) {
     return make_float3(f * v.x, f * v.y, f * v.z);
 }
 
-inline CUDA_CPU_FUNC float3 operator*(const uchar3 &v, const float &f) {
+inline CUDA_CPU_FUNC float3 operator * (const uchar3 &v, const float &f) {
     return f * v;
+}
+
+inline CUDA_CPU_FUNC bool operator < (const int2 &a, const int2 &b) {
+    return (a.x < b.x) && (a.y < b.y);
+}
+
+inline CUDA_CPU_FUNC bool operator <= (const int2 &a, const int2 &b) {
+    return (a.x <= b.x) && (a.y <= b.y);
+}
+
+inline CUDA_CPU_FUNC int2 operator / (const int2 &a, const int &b) {
+    return make_int2(a.x/b, a.y/b);
 }
 
 template<typename T>

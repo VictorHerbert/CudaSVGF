@@ -68,6 +68,8 @@ test: $(TARGET)
 run_no_args: $(TARGET)
 	@./$(TARGET)
 
+check: $(CSAN_TOOLS)
+
 $(CSAN_TOOLS): $(TARGET) 
 	@compute-sanitizer --tool $@ --show-backtrace=yes --log-file $(TEST_DIR)/$@.log ./$(TARGET) -t
 
@@ -79,7 +81,7 @@ doxygen:
 
 all: memcheck doxygen
 
-.PHONY: test $(CSAN_TOOLS) ncu doxygen
+.PHONY: test $(CSAN_TOOLS) check ncu doxygen 
 
 # ===========================================================================
 #                                  Clean
