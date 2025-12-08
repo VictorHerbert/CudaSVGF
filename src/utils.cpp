@@ -2,6 +2,13 @@
 
 #include <cuda_runtime.h>
 
+void CHECK_CUDA(cudaError_t result){
+    if (result != cudaSuccess) {
+        const char* errStr = cudaGetErrorString(result);
+        throw std::runtime_error(std::string("CUDA error: ") + errStr + " at line " + std::to_string(__LINE__));
+    }
+}
+
 void printGPUProperties(){
     cudaDeviceProp prop;
     int device;
@@ -26,3 +33,5 @@ void printGPUProperties(){
     std::cout << "Memory bandwidth: " << bandwidthGBs << " GB/s" << std::endl;
     std::cout << "Theoretical FP32 compute: " << fp32TFLOPS << " TFLOPS" << std::endl;
 }
+
+

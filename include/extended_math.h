@@ -84,8 +84,12 @@ inline CUDA_CPU_FUNC int totalSize(int3 shape){
     return shape.x * shape.y * shape.z;
 }
 
+inline CUDA_CPU_FUNC int inRange(int pos, int shape){
+    return (pos >= 0) && (pos < shape);
+}
+
 inline CUDA_CPU_FUNC int inRange(int2 pos, int2 shape){
-    return (pos.x >= 0) && (pos.x < shape.x) && (pos.y >= 0) && (pos.y < shape.y);
+    return inRange(pos.x, shape.x) && inRange(pos.y, shape.y);
 }
 
 inline CUDA_CPU_FUNC int flattenIndex(int2 p, int2 shape){

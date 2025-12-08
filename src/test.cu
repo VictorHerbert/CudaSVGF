@@ -1,6 +1,7 @@
 #include "image.h"
 #include "filter.cuh"
 #include "test.h"
+#include "utils.h"
 
 #include "third_party/stb_image.h"
 
@@ -61,6 +62,7 @@ void test(std::string wildcard) {
 // --------------------------------------------------------------------------------------------------------------
 
 int2 shape =  {1920, 1080};
+//int2 shape =  {512, 512};
 CudaGBuffer frame(shape);
 
 FilterParams defaultParams;
@@ -84,44 +86,92 @@ SKIP(IMAGE){
 
 // --------------------------------------------------------------------------------------------------------------
 
-KERNEL void test_cache_tile(uchar4 *in){
-    extern __shared__ uchar4 tile[];
-    int2 start = {blockIdx.x * blockDim.x, blockIdx.y * blockDim.y};
-    int2 end = {(blockIdx.x+1) * blockDim.x, (blockIdx.y+1) * blockDim.y};
-    cacheTile(tile, in, {1920, 1080}, start, end);
-}
-
-SKIP(CACHE_TILE){
-    dim3 blockSize(32,8);
-    dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-
-    test_cache_tile<<<gridSize, blockSize, 30*1024>>>(frame.render);
+TEST(TEST_SYNC){
     cudaDeviceSynchronize();
 }
 
+KERNEL void test_tileLine(uchar4 *in){
+    extern __shared__ uchar4 tile[];
+    //for(int i = 0; i < 10; i++)
+        tileLine(tile, in, 1000);
+}
+
+SKIP(TEST_tileLine){
+    dim3 blockSize(32,4);
+    dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+    
+    // Aligned Tile
+    test_tileLine<<<1, blockSize, 4*1000>>>(frame.render);
+    cudaDeviceSynchronize();
+}
 
 // --------------------------------------------------------------------------------------------------------------
 
-KERNEL void singleLevelFilterKernelBase(GBuffer frame, FilterParams params, int level){
-    singleLevelFilterBase(frame.render, frame.denoised, level, frame, params);
+KERNEL void dilatedFilterBaseKernel(GBuffer frame, FilterParams params, int level){
+    dilatedFilterBase(frame.render, frame.denoised, level, frame, params);
 }
 
-KERNEL void singleLevelFilterKernel(GBuffer frame, FilterParams params, int level){
-    singleLevelFilter(frame.render, frame.denoised, level, frame, params);
-}
+SKIP(LEVEL_FILTER_BASE){
+    dim3 blockSize(128,1);
+    dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
 
-TEST(FILTER_LEVEL_BASE){
-    singleLevelFilterKernelBase<<<defaultGridSize, defaultBlockSize>>>(frame, defaultParams, 0);
+    dilatedFilterBaseKernel<<<gridSize, blockSize>>>(frame, defaultParams, 1);
     cudaDeviceSynchronize();
 }
 
-TEST(FILTER_LEVEL){
-    int bytecount = tileBytes(defaultParams, {defaultBlockSize.x, defaultBlockSize.y});
-    singleLevelFilterKernel<<<defaultGridSize, defaultBlockSize, bytecount>>>(frame, defaultParams, 0);
+// --------------------------------------------------------------------------------------------------------------
+
+KERNEL void dilatedFilter2Kernel(GBuffer frame, FilterParams params, int level){
+    dilatedFilter2(frame.render, frame.denoised, level, frame, params);
+}
+
+SKIP(LEVEL_FILTER_2){
+    dim3 blockSize(128,1);
+    dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+
+    dilatedFilter2Kernel<<<gridSize, blockSize>>>(frame, defaultParams, 1);
     cudaDeviceSynchronize();
 }
 
-SKIP(FILTER_LEVEL_BENCHMARK){
+// --------------------------------------------------------------------------------------------------------------
+
+KERNEL void dilatedFilterLineTileKernel(GBuffer frame, FilterParams params, int level){
+    extern __shared__ uchar4 sharedMem[];
+    int offset = (blockDim.x + 2*(1<<(level+1)));
+
+    frame.renderTile = sharedMem;
+    frame.albedoTile = frame.renderTile + offset;
+    frame.normalTile = frame.albedoTile + offset;
+    if(blockIdx.x == 0 && blockIdx.y == 0)
+        /*if(threadIdx.x == 0 && threadIdx.y == 0){
+            printf("buffer0 %p | buffer1 %p\n", frame.buffer[0], frame.buffer[1]);
+            printf("render %p | albedo %p | normal %p\n", frame.render, frame.albedo, frame.normal);
+        }*/
+    dilatedFilterLineTile(frame.render, frame.denoised, level, frame, params);
+}
+
+CpuVector<dim3> blocks = {dim3(8,8), dim3(16,16), dim3(32, 1), dim3(32, 4), dim3(32, 16), dim3(32, 32), dim3(64, 16), dim3(128, 8), dim3(256, 4)};
+
+TEST(LEVEL_FILTER_LINE){
+    int level = 0;
+
+    for(auto blockSize : {dim3(128)}){
+        dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+
+        int byteCount = 3*4*(blockSize.x + 2*(1<<(level+1)));
+
+        dilatedFilterLineTileKernel<<<gridSize, blockSize, byteCount>>>(frame, defaultParams, level);
+        CHECK_CUDA(cudaDeviceSynchronize());
+
+        //std::cout << blockSize.x << " " << blockSize.y << "-> ";
+        //logTime("");
+    }
+
+}
+
+// --------------------------------------------------------------------------------------------------------------
+
+/*SKIP(FILTER_LEVEL_BENCHMARK){
     CpuVector<dim3> blockSizes = {dim3(8,8), dim3(16, 16), dim3(32,8)};
     CpuVector<int> levels = {0,1,2,3,4};
     CpuVector<FilterParams> params = {
@@ -135,36 +185,11 @@ SKIP(FILTER_LEVEL_BENCHMARK){
             for(auto param : params){
                 int bytecount = tileBytes(param, {blockSize.x, blockSize.y});
                 dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-                singleLevelFilterKernel<<<gridSize, blockSize, bytecount>>>(frame, param, level);
+                singledilatedFilterKernel<<<gridSize, blockSize, bytecount>>>(frame, param, level);
                 cudaDeviceSynchronize();
 
                 logTime("BLOCK (" + std::to_string(blockSize.x) + "," + std::to_string(blockSize.y) + ")\t LEVEL " + std::to_string(level));
             }
-}
+}*/
+
 // --------------------------------------------------------------------------------------------------------------
-
-SKIP(FILTER_BASE){
-    filterKernelBase<<<defaultGridSize, defaultBlockSize>>>(frame, defaultParams);
-    cudaDeviceSynchronize();
-}
-
-SKIP(FILTER_TILE_NO_CACHE){
-    FilterParams params = {
-        .tile=FilterParams::AVERAGE,
-        .depth=5
-    };
-
-    int bytecount = tileBytes(params, {defaultBlockSize.x, defaultBlockSize.y});
-
-    filterKernel<<<defaultGridSize, defaultBlockSize, bytecount>>>(frame, params);
-    cudaDeviceSynchronize();
-}
-
-SKIP(FILTER_TILE){
-    FilterParams params = {.depth=5};
-
-    int bytecount = tileBytes(params, {defaultBlockSize.x, defaultBlockSize.y});
-
-    filterKernel<<<defaultGridSize, defaultBlockSize, bytecount>>>(frame, params);
-    cudaDeviceSynchronize();
-}

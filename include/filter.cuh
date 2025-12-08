@@ -9,22 +9,6 @@
 #include "gbuffer.h"
 
 struct FilterParams {
-
-    enum Type {
-        AVERAGE     = 0,
-        SPATIAL     = 1 << 0,
-        RENDER      = 1 << 1,
-        ALBEDO      = 1 << 2,
-        NORMAL      = 1 << 3,
-        WAVELET     = 1 << 4,
-        BILATERAL   = SPATIAL | RENDER,
-        CROSS       = SPATIAL | RENDER | ALBEDO | NORMAL
-    };
-
-    Type type = CROSS;
-    Type tile = static_cast<Type>(ALBEDO | NORMAL);
-    int2 tileShape;
-
     int depth = 1;
     int radius = 2;
 
@@ -35,17 +19,23 @@ struct FilterParams {
 };
 
 CUDA_CPU_FUNC int haloSize(int radius, int level);
-//CUDA_CPU_FUNC int tileByteCount(int radius, int level, int2 blockShape);
-CUDA_CPU_FUNC int tileBytes(FilterParams params, int2 blockShape);
 
-CUDA_FUNC   void cacheTile              (uchar4* tile, const uchar4* in, const int2 frameShape, const int2 start, const int2 end);
+CUDA_CPU_FUNC int fullTileSize(int radius, int2 blockDimX, int level);
+CUDA_CPU_FUNC int fullTileArea(int radius, int level);
+CUDA_CPU_FUNC int fullTileBytes(int radius, int level);
 
-KERNEL      void filterKernelBase           (GBuffer frame, FilterParams params);
-KERNEL      void filterKernel           (GBuffer frame, FilterParams params);
-CUDA_FUNC   void singleLevelFilter      (uchar4* in, uchar4* out, int level, const GBuffer frame, const FilterParams params);
+CUDA_CPU_FUNC int lineTileSize(int radius, int blockDimX, int level);
+CUDA_CPU_FUNC int lineTileArea(int radius, int2 blockDim, int level);
+CUDA_CPU_FUNC int lineTileBytes(int radius, int2 blockDim, int level);
 
+CUDA_FUNC int tileLine(uchar4* tile, uchar4* input, int size);
 
+CUDA_FUNC int tileLine(uchar4* tile, uchar4* input, int2 shape, int radius, int line, int level);
 
-CUDA_FUNC   void singleLevelFilterBase  (uchar4* in, uchar4* out, int level, const GBuffer frame, const FilterParams params);
+CUDA_FUNC   void dilatedFilterBase      (uchar4* in, uchar4* out, int level, const GBuffer frame, const FilterParams params);
+CUDA_FUNC   void dilatedFilter2      (uchar4* in, uchar4* out, int level, const GBuffer frame, const FilterParams params);
+
+//CUDA_FUNC   void dilatedFilterFullTile  (uchar4* in, uchar4* out, int level, const GBuffer frame, const FilterParams params);
+CUDA_FUNC   void dilatedFilterLineTile  (uchar4* in, uchar4* out, int level, const GBuffer frame, const FilterParams params);
 
 #endif

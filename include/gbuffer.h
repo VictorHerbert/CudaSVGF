@@ -10,21 +10,6 @@
 #define CPU_FUNC __host__ __device__
 
 /**
- * @brief Computes the flattened linear index for a 2D position in a matrix.
- * @param pos 2D coordinate
- * @param shape Matrix size {width, height}
- * @return Linear index into the data array
- */
-CPU_FUNC int flattenIndex(int2 pos, int2 shape);
-
-/**
- * @brief Computes the total number of elements in a 2D region.
- * @param dims Dimensions {width, height}
- * @return Number of elements
- */
-CPU_FUNC int totalSize(int2 dims);
-
-/**
  * @brief Matrix wrapper storing a 2D array of uchar4 pixels.
  *
  * Provides bounds checking and 2D indexing.
