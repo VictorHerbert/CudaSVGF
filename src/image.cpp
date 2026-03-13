@@ -24,11 +24,11 @@ Image::Image(int3 shape){
     data = (byte*) malloc(totalSize(shape));
 }
 
-Image::Image(byte* data, int3 shape){
+/*Image::Image(byte* data, int3 shape){
     this->shape = shape;
     // TODO check if deep copy is needed, risc of double free
     this->data = data;
-}
+}*/
 
 Image::Image(std::string filename, int channels){
     int dummy;
@@ -36,7 +36,22 @@ Image::Image(std::string filename, int channels){
     data = (byte*) stbi_load(filename.c_str(), &(shape.x), &(shape.y), &dummy, shape.z);
 
     if(data == nullptr)
-        throw std::runtime_error("Failed to load image" + filename + "': " + stbi_failure_reason());
+        throw std::runtime_error("Failed to load image " + filename + "': " + stbi_failure_reason());
+    
+    //printf("Image OPEN   at %p -> %s\n", data, filename.c_str());
+}
+
+Image& Image::operator=(Image&& other){
+    if(this != &other){
+        if(data != nullptr) free(data);
+
+        data = other.data;
+        shape = other.shape;
+        
+        other.data = nullptr;
+    }
+
+    return *this;
 }
 
 void Image::save(std::string filename){
@@ -52,5 +67,8 @@ void Image::save(std::string filename, byte* data, int3 shape){
 }
 
 Image::~Image(){
-    free(data);
+    if(data != nullptr){
+        //printf("Image DELETE at %p\n", data);
+        free(data);
+    }
 }

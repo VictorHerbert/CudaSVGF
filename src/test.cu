@@ -2,6 +2,8 @@
 #include "filter.cuh"
 #include "test.h"
 #include "utils.h"
+#include "video.cuh"
+#include "metrics.h"
 
 #include "third_party/stb_image.h"
 
@@ -9,45 +11,77 @@
 #include <cassert>
 #include <regex>
 
-
 const std::string OUTPUT_PATH =  "test/";
 const std::string IMAGE_SAMPLE_PATH =  "render/sponza/render/1.png";
+const std::string IMAGE_SAMPLE_GBUFFER_PATH =  "render/sponza/$channel$/1.png";
+const std::string IMAGE_OUPUT_PATH =  "render/sponza/output/0.png";
 
 FuncVector registered_funcs;
-auto logStart = std::chrono::high_resolution_clock::now();
 
-void logTime(std::string log){
+void printTestFuncs(){
+    //printf("%d available tests: ", registered_funcs.size());
+    for (auto& [name, func] : registered_funcs)
+        printf("\t%s\n", name.c_str());
+}
+
+
+#include <chrono>
+#include <iostream>
+
+#define BENCHMARK(label, ...) \
+do { \
+    auto _start = std::chrono::high_resolution_clock::now(); \
+    { __VA_ARGS__ } \
+    auto _end = std::chrono::high_resolution_clock::now(); \
+    auto _elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(_end - _start); \
+    std::cout << label << ": " << _elapsed.count() << " ms\n"; \
+} while (0)
+
+template<typename F>
+void benchmark(const std::string label, F&& func) {
+    auto start = std::chrono::high_resolution_clock::now();
+    func();
     auto end = std::chrono::high_resolution_clock::now();
-    double frameTime = std::chrono::duration<double, std::milli>(end - logStart).count();
 
-    printf("Reached %s with %.3f ms\n", log.c_str(), frameTime);
-
-    logStart = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << label << ": " << elapsed.count() << " ms\n";
 }
 
 void test(std::string wildcard) {
-    printf("----------------------------------------------------------\n");
+    /*printf("----------------------------------------------------------\n");
     printf("%d available tests: ", registered_funcs.size());
     for (auto& [name, func] : registered_funcs)
         printf("%s ", name.c_str());
-    printf("\n----------------------------------------------------------\n");
+    printf("\n----------------------------------------------------------\n");*/
+
+    //printTestFuncs();
 
     std::regex base_regex(wildcard);
 
+    printf("----------------------------------------------------------\n");
+    if (registered_funcs.empty()) {
+        printf("No tests found\n");
+        printf("----------------------------------------------------------\n");
+        return;
+    }
     for (auto& [name, func] : registered_funcs) {
         if (!std::regex_match(name, base_regex)) {
             continue;
         }
 
         try {
-            printf("TEST %s:\n", name.c_str());
-            auto start = std::chrono::high_resolution_clock::now();
-            logStart = start;
-            func();
-            auto end = std::chrono::high_resolution_clock::now();
-            double frameTime = std::chrono::duration<double, std::milli>(end - start).count();
+            //printf("TEST %s:\n", name.c_str());
+            //auto start = std::chrono::high_resolution_clock::now();
 
-            printf("Passed with %.3f ms\n", frameTime);
+            //benchmark("TEST " + name, [&]{
+                func();
+            //});
+            //auto end = std::chrono::high_resolution_clock::now();
+            //double frameTime = std::chrono::duration<double, std::milli>(end - start).count();
+
+            //printf("Passed with %.3f ms\n", frameTime);
+
+            printf("\033[33mTEST\033[0m \033[1m%-30s\033[0m \033[32mPASSED\033[0m\n", name.c_str());
         }
         catch (const std::runtime_error& e) {
             printf("Fail with %s\n", e.what());
@@ -63,7 +97,12 @@ void test(std::string wildcard) {
 
 int2 shape =  {1920, 1080};
 //int2 shape =  {512, 512};
-CudaGBuffer frame(shape);
+
+CpuGBuffer cpuFrame(shape);
+CpuVector<uchar4> cpuBuffer(totalSize(shape));
+
+CudaGBuffer cudaFrame(shape);
+CudaVector<uchar4> cudaBuffer(totalSize(shape));
 
 FilterParams defaultParams;
 dim3 defaultBlockSize(32,8);
@@ -72,11 +111,11 @@ int2 defaultBlockShape = {defaultBlockSize.x, defaultBlockSize.y};
 
 // --------------------------------------------------------------------------------------------------------------
 
-SKIP(DEVICE_STATS){
+SKIP(device_stats){
     printGPUProperties();
 }
 
-SKIP(IMAGE){
+SKIP(image_manipulation){
     Image image3(IMAGE_SAMPLE_PATH, 3);
     image3.save(OUTPUT_PATH + "image_open_save3.png");
 
@@ -84,112 +123,93 @@ SKIP(IMAGE){
     image4.save(OUTPUT_PATH + "image_open_save4.png");
 }
 
-// --------------------------------------------------------------------------------------------------------------
-
-TEST(TEST_SYNC){
-    cudaDeviceSynchronize();
-}
-
-KERNEL void test_tileLine(uchar4 *in){
-    extern __shared__ uchar4 tile[];
-    //for(int i = 0; i < 10; i++)
-        tileLine(tile, in, 1000);
-}
-
-SKIP(TEST_tileLine){
-    dim3 blockSize(32,4);
-    dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-    
-    // Aligned Tile
-    test_tileLine<<<1, blockSize, 4*1000>>>(frame.render);
-    cudaDeviceSynchronize();
+SKIP(gbuffer_open){
+    CpuGBuffer buffer(IMAGE_SAMPLE_GBUFFER_PATH);
+    buffer.renderImg.save(OUTPUT_PATH + "render_out.png");
+    buffer.normalImg.save(OUTPUT_PATH + "normal_out.png");
+    buffer.albedoImg.save(OUTPUT_PATH + "albedo_out.png");
 }
 
 // --------------------------------------------------------------------------------------------------------------
 
-KERNEL void dilatedFilterBaseKernel(GBuffer frame, FilterParams params, int level){
-    dilatedFilterBase(frame.render, frame.denoised, level, frame, params);
-}
+SKIP(atrous_pass_cpu){
+    cpuFrame.openImages(IMAGE_SAMPLE_GBUFFER_PATH);
 
-SKIP(LEVEL_FILTER_BASE){
-    dim3 blockSize(128,1);
-    dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+    benchmark(">> BENCH atrous_pass_cpu", [&]{
+        atrousFilterPassCpu(cpuFrame.render, cpuFrame.denoised, 0, cpuFrame, defaultParams);
+    });
 
-    dilatedFilterBaseKernel<<<gridSize, blockSize>>>(frame, defaultParams, 1);
-    cudaDeviceSynchronize();
-}
-
-// --------------------------------------------------------------------------------------------------------------
-
-KERNEL void dilatedFilter2Kernel(GBuffer frame, FilterParams params, int level){
-    dilatedFilter2(frame.render, frame.denoised, level, frame, params);
-}
-
-SKIP(LEVEL_FILTER_2){
-    dim3 blockSize(128,1);
-    dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-
-    dilatedFilter2Kernel<<<gridSize, blockSize>>>(frame, defaultParams, 1);
-    cudaDeviceSynchronize();
+    Image::save(
+        IMAGE_OUPUT_PATH,
+        (byte*) cpuFrame.denoised,
+        {cpuFrame.shape.x, cpuFrame.shape.y, 4}
+    );
 }
 
 // --------------------------------------------------------------------------------------------------------------
 
-KERNEL void dilatedFilterLineTileKernel(GBuffer frame, FilterParams params, int level){
-    extern __shared__ uchar4 sharedMem[];
-    int offset = (blockDim.x + 2*(1<<(level+1)));
-
-    frame.renderTile = sharedMem;
-    frame.albedoTile = frame.renderTile + offset;
-    frame.normalTile = frame.albedoTile + offset;
-    if(blockIdx.x == 0 && blockIdx.y == 0)
-        /*if(threadIdx.x == 0 && threadIdx.y == 0){
-            printf("buffer0 %p | buffer1 %p\n", frame.buffer[0], frame.buffer[1]);
-            printf("render %p | albedo %p | normal %p\n", frame.render, frame.albedo, frame.normal);
-        }*/
-    dilatedFilterLineTile(frame.render, frame.denoised, level, frame, params);
+__global__ void atrousFilterPassCudaBaseKernel(GBuffer frame, const FilterParams params, int level){
+    atrousFilterPassCudaBase(frame.render, frame.denoised, level, frame, params);
 }
 
-CpuVector<dim3> blocks = {dim3(8,8), dim3(16,16), dim3(32, 1), dim3(32, 4), dim3(32, 16), dim3(32, 32), dim3(64, 16), dim3(128, 8), dim3(256, 4)};
-
-TEST(LEVEL_FILTER_LINE){
-    int level = 0;
-
-    for(auto blockSize : {dim3(128)}){
-        dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-
-        int byteCount = 3*4*(blockSize.x + 2*(1<<(level+1)));
-
-        dilatedFilterLineTileKernel<<<gridSize, blockSize, byteCount>>>(frame, defaultParams, level);
-        CHECK_CUDA(cudaDeviceSynchronize());
-
-        //std::cout << blockSize.x << " " << blockSize.y << "-> ";
-        //logTime("");
-    }
-
+SKIP(atrous_pass_cuda_base){
+    for(int i = 0; i < 5; i++)
+        benchmark(">> BENCH atrous_pass_cuda_base" + std::to_string(i), [&]{
+            atrousFilterPassCudaBaseKernel<<<defaultGridSize, defaultBlockSize>>>(cudaFrame, defaultParams, i);
+            cudaDeviceSynchronize();
+        });
 }
 
 // --------------------------------------------------------------------------------------------------------------
 
-/*SKIP(FILTER_LEVEL_BENCHMARK){
-    CpuVector<dim3> blockSizes = {dim3(8,8), dim3(16, 16), dim3(32,8)};
-    CpuVector<int> levels = {0,1,2,3,4};
-    CpuVector<FilterParams> params = {
-        FilterParams{.tile= FilterParams::AVERAGE},
-        FilterParams{.tile= FilterParams::ALBEDO},
-        FilterParams{.tile= static_cast<FilterParams::Type>(FilterParams::ALBEDO | FilterParams::NORMAL)}
-    };
+SKIP(atrous_cpu){
+    cpuFrame.openImages(IMAGE_SAMPLE_GBUFFER_PATH);
 
-    for(auto blockSize : blockSizes)
-        for(auto level : levels)
-            for(auto param : params){
-                int bytecount = tileBytes(param, {blockSize.x, blockSize.y});
-                dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-                singledilatedFilterKernel<<<gridSize, blockSize, bytecount>>>(frame, param, level);
-                cudaDeviceSynchronize();
+    benchmark(">> BENCH atrous_cpu", [&]{
+        atrousFilterCpu(cpuFrame, defaultParams);
+    });
 
-                logTime("BLOCK (" + std::to_string(blockSize.x) + "," + std::to_string(blockSize.y) + ")\t LEVEL " + std::to_string(level));
-            }
-}*/
+    Image::save(
+        IMAGE_OUPUT_PATH,
+        (byte*) cpuFrame.denoised,
+        {cpuFrame.shape.x, cpuFrame.shape.y, 4}
+    );
+}
 
 // --------------------------------------------------------------------------------------------------------------
+
+__global__ void atrousFilterCudaBaseKernel(GBuffer frame, FilterParams params, int level){
+    printf("Inside kernel");
+    params.depth = level;
+    //atrousFilterCudaBase(frame, params);
+}
+
+TEST(atrous_cuda_base){
+    cpuFrame.openImages(IMAGE_SAMPLE_GBUFFER_PATH);
+
+    int i = 0;
+    benchmark(">> BENCH atrous_cuda_base" + std::to_string(i), [&]{
+        printf("inside macro\n");
+        atrousFilterCudaBaseKernel<<<defaultGridSize, defaultBlockSize>>>(cudaFrame, defaultParams, i);
+        cudaDeviceSynchronize();
+        printf("finish macro\n");
+    });
+
+    Image::save(
+        IMAGE_OUPUT_PATH ,
+        (byte*) cpuFrame.denoised,
+        {cpuFrame.shape.x, cpuFrame.shape.y, 4}
+    );
+}
+
+// --------------------------------------------------------------------------------------------------------------
+
+SKIP(video_atrous_cpu){
+    videoFilterCpu("render/sponza/$channel$/$i$.png", defaultParams);
+}
+
+// --------------------------------------------------------------------------------------------------------------
+
+SKIP(video_atrous_gpu){
+
+}

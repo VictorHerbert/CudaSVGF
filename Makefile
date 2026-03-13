@@ -5,7 +5,7 @@
 NVCC = nvcc
 CXX = $(NVCC)
 
-CXXFLAGS_LK = -w -G -g -O3 -rdc=true -std=c++17 -arch=sm_75 -I./include
+CXXFLAGS_LK = -w -G -g -O0 -rdc=true -std=c++17 -arch=sm_75 -I./include
 CXXFLAGS = $(CXXFLAGS_LK) -dc
 
 CSAN_TOOLS := memcheck racecheck synccheck initcheck

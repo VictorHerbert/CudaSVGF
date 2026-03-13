@@ -19,6 +19,7 @@ typedef std::vector<std::pair<std::string, std::function<void()>>> FuncVector;
     void func_name()
 
 
+void printTestFuncs();
 void test(std::string wildcard = ".*");
 
 #endif

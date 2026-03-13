@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <stdio.h>
+//#include <stdio.h>
 
 #include <cuda_runtime.h>
 #include <vector>

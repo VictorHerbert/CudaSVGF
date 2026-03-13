@@ -1,46 +1,50 @@
 #include "gbuffer.h"
 
 #include "extended_math.h"
+#include "filter.cuh"
 
-CUDA_CPU_FUNC
-uchar4& Mat::operator[](int2 pos) {
-    return data[flattenIndex(pos, shape)];
+#include <regex>
+
+CpuGBuffer::CpuGBuffer (int2 shape){
+    this->allocate(shape);
 }
 
-CUDA_CPU_FUNC
-bool Mat::inside(int2 pos) {
-    return (make_int2(0,0) <= pos) && (pos < shape);
+CpuGBuffer::CpuGBuffer(std::string filepath){
+    openImages(filepath);
+    this->allocate({renderImg.shape.x, renderImg.shape.y});
 }
 
-CUDA_CPU_FUNC
-uchar4& Tile::operator[](int2 pos) {
-    return Mat::operator[](pos - start);
+void CpuGBuffer::openImages(std::string filepath){
+    renderImg = Image(std::regex_replace(filepath, std::regex("\\$channel\\$"), "render"), 4);
+    normalImg = Image(std::regex_replace(filepath, std::regex("\\$channel\\$"), "normal"), 4);
+    albedoImg = Image(std::regex_replace(filepath, std::regex("\\$channel\\$"), "albedo"), 4);
+
+    render = (uchar4*) renderImg.data;
+    normal = (uchar4*) normalImg.data;
+    albedo = (uchar4*) albedoImg.data;
 }
 
-CUDA_CPU_FUNC
-bool Tile::inside(int2 pos) {
-    return (start <= pos) && (pos < end);
+void CpuGBuffer::allocate(int2 shape){
+    int size = totalSize(shape);
+    this->shape = shape;
+    denoisedVec.resize(size);
+    bufferVec.resize(2*size);
+    
+    denoised = denoisedVec.data();
+    buffer[0] = bufferVec.data();
+    buffer[1] = bufferVec.data() + size;
 }
 
-CUDA_CPU_FUNC
-int Tile::size() {
-    return totalSize(end - start);
+//void CpuGBuffer::atrousFilterCpu(FilterParams params){
+//    atrousFilterCpu((GBuffer) *this, params);
+//}
+
+float CpuGBuffer::snr(){
+    return 1;
 }
 
-CUDA_CPU_FUNC
-int Tile::bytes() {
-    return 4 * size();
-}
-
-CUDA_CPU_FUNC
-void Tile::cache(Mat mat, int2 s, int2 e) {
-    int2 dims = e - s;
-    for(int y = 0; y < dims.y; y++) {
-        for(int x = 0; x < dims.x; x++) {
-            int2 local = make_int2(x, y);
-            mat[s + local] = (*this)[local];
-        }
-    }
+void CpuGBuffer::saveDenoised(std::string filepath){
+    Image::save(filepath, (byte*) denoised, {shape.x, shape.y, 4});
 }
 
 CudaGBuffer::CudaGBuffer (int2 shape){
