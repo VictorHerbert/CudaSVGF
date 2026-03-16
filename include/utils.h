@@ -13,7 +13,25 @@
 
 typedef unsigned char byte;
 
-void CHECK_CUDA(cudaError_t result);
+#define CUDA_ERROR_CHECK(result) \
+do { \
+    cudaError_t err = (result); \
+    if (err != cudaSuccess) { \
+        const char* errStr = cudaGetErrorString(err); \
+        throw std::runtime_error( \
+            std::string("CUDA error: ") + errStr + \
+            " at " + __FILE__ + ":" + std::to_string(__LINE__) \
+        ); \
+    } \
+} while(0)
+
+#define CUDA_KERNEL_ERROR_CHECK(kernel) \
+do { \
+    (kernel) \
+    CUDA_ERROR_CHECK(cudaGetLastError()); \
+} while(0)
+
+
 
 void printGPUProperties();
 

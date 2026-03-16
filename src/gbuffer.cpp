@@ -6,12 +6,12 @@
 #include <regex>
 
 CpuGBuffer::CpuGBuffer (int2 shape){
-    this->allocate(shape);
+    this->resize(shape);
 }
 
 CpuGBuffer::CpuGBuffer(std::string filepath){
     openImages(filepath);
-    this->allocate({renderImg.shape.x, renderImg.shape.y});
+    this->resize({renderImg.shape.x, renderImg.shape.y});
 }
 
 void CpuGBuffer::openImages(std::string filepath){
@@ -24,7 +24,7 @@ void CpuGBuffer::openImages(std::string filepath){
     albedo = (uchar4*) albedoImg.data;
 }
 
-void CpuGBuffer::allocate(int2 shape){
+void CpuGBuffer::resize(int2 shape){
     int size = totalSize(shape);
     this->shape = shape;
     denoisedVec.resize(size);
@@ -48,10 +48,10 @@ void CpuGBuffer::saveDenoised(std::string filepath){
 }
 
 CudaGBuffer::CudaGBuffer (int2 shape){
-    this->allocate(shape);
+    this->resize(shape);
 }
 
-void CudaGBuffer::allocate(int2 shape){
+void CudaGBuffer::resize(int2 shape){
     int size = totalSize(shape);
     this->shape = shape;
     renderVec.resize(size);

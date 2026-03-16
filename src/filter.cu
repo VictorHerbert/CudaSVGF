@@ -85,8 +85,7 @@ CUDA_CPU_FUNC void atrousFilterPixel(int2 pos, uchar4* in, uchar4* out, int leve
 }
 
 
-CUDA_FUNC void atrousFilterCudaBase(GBuffer frame, const FilterParams params){
-    printf("atrousFilterCudaBase");
+KERNEL void atrousFilterCudaBase(GBuffer frame, const FilterParams params){
     for(int i = 0; i < params.depth; i++){
         atrousFilterPassCudaBase(
             (i == 0) ? frame.render : frame.buffer[i%2],
@@ -155,6 +154,7 @@ CUDA_FUNC void atrousFilterPassCudaBase(uchar4* in, uchar4* out, int level, cons
 
     // TODO make sure it load an int instead of 4x load char
     out[flattenIndex(framePos, frame.shape)] = make_uchar4(acum);
+    out[flattenIndex(framePos, frame.shape)] = in[flattenIndex(framePos, frame.shape)];
 
     __syncthreads();
 }

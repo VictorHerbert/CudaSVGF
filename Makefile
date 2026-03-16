@@ -89,7 +89,7 @@ all: memcheck doxygen
 
 test_clean: $(TARGET)
 	@$(RM) -rf test/*
-	@./$(TARGET) -t
+	@$(RM) -rf render/sponza/output/*	
 
 clean:
 	$(RM) -rf $(BUILD_DIR)/*

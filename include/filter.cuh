@@ -14,7 +14,7 @@ CUDA_CPU_FUNC void atrousFilterPixel(int2 pos, uchar4* in, uchar4* out, int leve
 void atrousFilterCpu(GBuffer frame, const FilterParams params);
 void atrousFilterPassCpu(uchar4* in, uchar4* out, int level, const GBuffer frame, const FilterParams params);
 
-CUDA_FUNC void atrousFilterCudaBase(GBuffer frame, const FilterParams params);
+KERNEL void atrousFilterCudaBase(GBuffer frame, const FilterParams params);
 CUDA_FUNC void atrousFilterPassCudaBase(uchar4* in, uchar4* out, int level, const GBuffer frame, const FilterParams params);
 
 //CUDA_FUNC void AtrousFilterCuda(GBuffer frame, const FilterParams params);

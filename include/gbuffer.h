@@ -12,11 +12,11 @@
 
 struct GBuffer{
     int2 shape;
-    uchar4* render = 0;
-    uchar4* normal = 0;
-    uchar4* albedo = 0;
-    uchar4* denoised = 0;
-    uchar4* buffer[2] = {0,0};
+    uchar4* render = nullptr;
+    uchar4* normal = nullptr;
+    uchar4* albedo = nullptr;
+    uchar4* denoised = nullptr;
+    uchar4* buffer[2] = {nullptr, nullptr};
 
     uchar4* golden;
 };
@@ -30,7 +30,7 @@ struct CpuGBuffer : GBuffer {
     CpuGBuffer (int2 shape);
     CpuGBuffer (std::string filepath);
 
-    void allocate(int2 shape);
+    void resize(int2 shape);
     void openImages(std::string filepath);
 
     void atrousFilterCpu(FilterParams params);
@@ -45,7 +45,7 @@ struct CudaGBuffer : GBuffer {
     CudaGBuffer(){};
     CudaGBuffer (int2 shape);
 
-    void allocate(int2 shape);
+    void resize(int2 shape);
     void openImages(std::string filepath, cudaStream_t stream = 0);
 };
 

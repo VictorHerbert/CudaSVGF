@@ -53,7 +53,7 @@ inline CUDA_CPU_FUNC uchar4 make_uchar4(const T &v){
         0
     );*/
 
-    return make_uchar4(v.x, v.y, v.z, 0);
+    return make_uchar4(v.x, v.y, v.z, 255);
 }
 
 /*

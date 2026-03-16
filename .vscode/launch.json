@@ -11,7 +11,7 @@
             "request": "launch",
             "args": ["-t"],
             "program": "${workspaceFolder}/build/main",
-            "preLaunchTask": "Make",
+            "preLaunchTask": "Compile",
             "cwd": "${workspaceFolder}"
         },
         {
@@ -20,7 +20,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/build/main",
             "args": ["-t"],
-            "preLaunchTask": "Make",
+            "preLaunchTask": "Compile",
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
