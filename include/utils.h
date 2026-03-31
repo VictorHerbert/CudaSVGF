@@ -13,6 +13,8 @@
 
 typedef unsigned char byte;
 
+//#define MEM_DEBUG
+
 #define CUDA_ERROR_CHECK(result) \
 do { \
     cudaError_t err = (result); \
@@ -30,7 +32,6 @@ do { \
     (kernel) \
     CUDA_ERROR_CHECK(cudaGetLastError()); \
 } while(0)
-
 
 
 void printGPUProperties();

@@ -11,18 +11,18 @@ void videoFilterCpu(
     std::string filepath,
     std::string outputPath,
     int2 shape,
+    int depth,
     int frameCount,
     FilterParams params = FilterParams()
 );
 
 void videoFilterCuda(
     std::string filepath,
-    std::string outputPath,
     int2 shape,
     int frameCount,
+    int depth,
     FilterParams params = FilterParams(),
     int maxStreamCount = 4
 );
-
 
 #endif

@@ -38,7 +38,9 @@ Image::Image(std::string filename, int channels){
     if(data == nullptr)
         throw std::runtime_error("Failed to load image " + filename + "': " + stbi_failure_reason());
     
-    //printf("Image OPEN   at %p -> %s\n", data, filename.c_str());
+    #ifdef MEM_DEBUG
+    printf("Image OPEN   at %p -> %s\n", data, filename.c_str());
+    #endif
 }
 
 Image& Image::operator=(Image&& other){
@@ -68,7 +70,9 @@ void Image::save(std::string filename, byte* data, int3 shape){
 
 Image::~Image(){
     if(data != nullptr){
-        //printf("Image DELETE at %p\n", data);
+        #ifdef MEM_DEBUG
+        printf("Image DELETE at %p\n", data);
+        #endif
         free(data);
     }
 }

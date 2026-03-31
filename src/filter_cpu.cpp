@@ -1,7 +1,7 @@
 #include "filter.cuh"
 
 
-void atrousFilterCpu(GBuffer<uchar3> frame, int depth, FilterParams params){
+void atrousFilterCpu(GFrame<uchar3> frame, int depth, FilterParams params){
     for(int i = 0; i < depth; i++){
         atrousFilterPassCpu(
             (i == 0) ? frame.render : frame.buffer[i%2],
@@ -11,7 +11,7 @@ void atrousFilterCpu(GBuffer<uchar3> frame, int depth, FilterParams params){
     }
 }
 
-void atrousFilterPassCpu(const uchar3* in, uchar3* out, int level, GBuffer<uchar3> frame, FilterParams params){
+void atrousFilterPassCpu(const uchar3* in, uchar3* out, int level, GFrame<uchar3> frame, FilterParams params){
     int2 framePos;
 
     for(framePos.x = 0; framePos.x < frame.shape.x; framePos.x++){
@@ -21,7 +21,7 @@ void atrousFilterPassCpu(const uchar3* in, uchar3* out, int level, GBuffer<uchar
     }
 }
 
-void atrousFilterPixelCpu(int2 pos, const uchar3* in, uchar3* out, int level, GBuffer<uchar3> frame, FilterParams params){
+void atrousFilterPixelCpu(int2 pos, const uchar3* in, uchar3* out, int level, GFrame<uchar3> frame, FilterParams params){
     const float waveletSpline[3] = {3.0/8.0, 1.0/4.0, 1.0/16.0};
 
     float3 acum = {0, 0, 0};
@@ -31,7 +31,7 @@ void atrousFilterPixelCpu(int2 pos, const uchar3* in, uchar3* out, int level, GB
     int memIdx = flattenIndex(pos, frame.shape);
 
     float3 refRender   = make_float3(in[memIdx]);
-    float3 refNormal   = make_float3(frame.normal[memIdx]);
+    float3 refNormal   = parseNormal(frame.normal[memIdx]);
     float3 refAlbedo   = make_float3(frame.albedo[memIdx]);
 
     for(dPos.x = -ATROUS_RADIUS; dPos.x <= ATROUS_RADIUS; dPos.x++){
@@ -51,8 +51,8 @@ void atrousFilterPixelCpu(int2 pos, const uchar3* in, uchar3* out, int level, GB
             float dAlbedo = length(refAlbedo - nAlbedo);
             float wAlbedo = exp(-dAlbedo/params.sigmaAlbedo);
 
-            float3 nNormal = make_float3(frame.normal[nMemIdx]);
-            float dNormal = dot(refNormal, nNormal);
+            float3 nNormal = parseNormal(frame.normal[nMemIdx]);
+            float dNormal = 1-dot(refNormal, nNormal);
             float wNormal = exp(-dNormal/params.sigmaNormal);
 
             float dSpace = length(make_float2(dPos));

@@ -37,8 +37,7 @@ void test() {
         SKIP();
 
         //int2 shape = {512, 512};
-        CpuGBuffer<uchar3> cpuFrame(shape);
-        cpuFrame.openImages("render/sponza/$channel$/1.png");
+        CpuGFrame<uchar3> cpuFrame(shape);
 
         BENCH("cpu_atrous", [&]{
             atrousFilterCpu(cpuFrame, 5);
@@ -49,9 +48,9 @@ void test() {
 // --------------------------------------------------------------------------------------------------------------
 
     CHECK("cuda_atrous_base", [&]{
-        //SKIP();
+        SKIP();
 
-        CudaGBuffer<uchar3> frame(shape);
+        CudaGFrame<uchar3> frame(shape);
 
         for(dim3 blockSize : blockSizes){
             dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
@@ -64,9 +63,9 @@ void test() {
     });
 
     CHECK("cuda_atrous_uchar4", [&]{
-        //SKIP();
+        SKIP();
 
-        CudaGBuffer<uchar4> frame(shape);
+        CudaGFrame<uchar4> frame(shape);
 
         for(dim3 blockSize : blockSizes){
             dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
@@ -78,25 +77,10 @@ void test() {
         }
     });
 
-    CHECK("cuda_atrous_O3", [&]{
-        //SKIP();
-
-        CudaGBuffer<uchar4> frame(shape);
-
-        for(dim3 blockSize : blockSizes){
-            dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-
-            BENCH("cuda_atrous_O3 dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
-                atrousFilterCudaKernelO3<<<gridSize, blockSize>>>(frame.render, frame.denoised, depth,frame);
-                cudaDeviceSynchronize();
-            });
-        }
-    });
-
     CHECK("cuda_atrous_aprox", [&]{
-        //SKIP();
+        SKIP();
 
-        CudaGBuffer<uchar4> frame(shape);
+        CudaGFrame<uchar4> frame(shape);
 
         for(dim3 blockSize : blockSizes){
             dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
@@ -112,17 +96,7 @@ void test() {
 
     CHECK("video_cuda", [&]{
         videoFilterCuda(
-            "render/sponza/$channel$/$i$.png",
-            "render/sponza/output/$i$.png",
-            shape,
-            5
+            "render/cornell/", {512, 512}, 10, 5 
         );
     });
-
-// --------------------------------------------------------------------------------------------------------------
-
-    CHECK("params_exploration", [&]{
-        SKIP();
-    });
-
 }

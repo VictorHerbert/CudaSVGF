@@ -101,4 +101,10 @@ inline CUDA_CPU_FUNC int2 indexToPos(int p, int2 shape){
     return {p%shape.x, p/shape.x};
 }
 
+
+template <typename T>
+inline CUDA_CPU_FUNC float3 parseNormal(T v){
+    return normalize(make_float3(v) - make_float3(255, 255, 255)/2);
+}
+
 #endif

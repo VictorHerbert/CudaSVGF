@@ -5,8 +5,8 @@
 NVCC = nvcc
 CXX = $(NVCC)
 
-CXXFLAGS_LK = -w -rdc=true -std=c++17 -arch=sm_75 -I./include -lineinfo
-#CXXFLAGS_LK = -w -G -g -O3 -rdc=true -std=c++17 -arch=sm_75 -I./include
+CXXFLAGS_LK = -w -lineinfo -O3 -rdc=true -std=c++17 -arch=sm_75 -I./include 
+#CXXFLAGS_LK = -w -G -g -rdc=true -std=c++17 -arch=sm_75 -I./include
 CXXFLAGS = $(CXXFLAGS_LK) -dc
 
 CSAN_TOOLS := memcheck racecheck synccheck initcheck
@@ -44,23 +44,19 @@ TARGET = $(BUILD_DIR)/main
 #                               Build Rules
 # ===========================================================================
 
-$(BUILD_DIR)/filter_cpu.o: CXXFLAGS += -O0
-$(BUILD_DIR)/filter_base.o: CXXFLAGS += -O0
-$(BUILD_DIR)/filter_u4.o: CXXFLAGS += -O0
-$(BUILD_DIR)/filter_o3.o: CXXFLAGS += -O3
-$(BUILD_DIR)/filter_opt.o: CXXFLAGS += -O3 --use_fast_math
+$(BUILD_DIR)/filter_opt.o: CXXFLAGS += --use_fast_math
 
 $(TARGET): $(OBJ)
-	@echo "Linking $^ into $@ with $(CXXFLAGS)"
+	@echo "Linking $^ into $@"
 	@$(NVCC) $(CXXFLAGS_LK) -o $@ $^ $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@printf "Recompiling %-20s into %s with $(CXXFLAGS)\n" "$<" "$@"
+	@printf "Recompiling %-20s into %s\n" "$<" "$@"
 	@$(NVCC) $(CXXFLAGS) -M -MT $@ $< > $(BUILD_DIR)/$*.d
 	@$(NVCC) $(CXXFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cu
-	@printf "Recompiling %-20s into %s with $(CXXFLAGS)\n" "$<" "$@"
+	@printf "Recompiling %-20s into %s\n" "$<" "$@"
 	@$(NVCC) $(CXXFLAGS) -M -MT $@ $< > $(BUILD_DIR)/$*.d
 	@$(NVCC) $(CXXFLAGS) -c $< -o $@
 	@$(NVCC) $(CXXFLAGS) -cubin $< -o $(BUILD_DIR)/$*.cubin
@@ -78,16 +74,13 @@ compile: $(TARGET)
 test: $(TARGET)
 	@./$(TARGET) -t
 
-run_no_args: $(TARGET)
-	@./$(TARGET)
+cli: $(TARGET)
+	@./$(TARGET) render/cornell/ 512 512 10 24 100 100 100 100
 
 check: $(CSAN_TOOLS)
 
 $(CSAN_TOOLS): $(TARGET) 
 	@compute-sanitizer --tool $@ --show-backtrace=yes --log-file $(TEST_DIR)/$@.log ./$(TARGET) -t
-
-ncu: $(TARGET)
-	@ncu ./$(TARGET) -t
 
 doxygen:
 	doxygen Doxyfile

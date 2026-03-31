@@ -79,11 +79,17 @@ template <typename T>
 void CudaVector<T>::resize(size_t newSize) {
     if (data_p){
         cudaFree(data_p);
-        //printf("cudaFree at %p\n", data_p);
+        
+        #ifdef MEM_DEBUG
+        printf("cudaFree at %p\n", data_p);
+        #endif
     }
-    CUDA_ERROR_CHECK(
-        cudaMalloc(&data_p, newSize * sizeof(T)));
-    //printf("cudaMalloc at %p\n", data_p);
+    CUDA_ERROR_CHECK(cudaMalloc(&data_p, newSize * sizeof(T)));
+
+    #ifdef MEM_DEBUG
+    printf("cudaMalloc at %p\n", data_p);
+    #endif
+
     size_p = newSize;
 }
 
@@ -91,32 +97,36 @@ template <typename T>
 void CudaVector<T>::copyFrom(T* v, size_t size) {
     if (size > size_p)
         throw std::runtime_error("Size mismatch");
-    CUDA_ERROR_CHECK(
-        cudaMemcpy(data_p, v, size * sizeof(T), cudaMemcpyHostToDevice));
+    
+    CUDA_ERROR_CHECK(cudaMemcpy(data_p, v, size * sizeof(T), cudaMemcpyHostToDevice));
 }
 
 template <typename T>
 void CudaVector<T>::copyFromAsync(T* v, size_t size, cudaStream_t stream) {
     if (size > size_p)
         throw std::runtime_error("Size mismatch");
-    cudaMemcpyAsync(data_p, v, size * sizeof(T), cudaMemcpyHostToDevice, stream);
+    
+    CUDA_ERROR_CHECK(cudaMemcpyAsync(data_p, v, size * sizeof(T), cudaMemcpyHostToDevice, stream));
 }
 
 template <typename T>
 void CudaVector<T>::copyTo(T *v) {
-    cudaMemcpy(v, data_p, sizeof(T) * size_p, cudaMemcpyDeviceToHost);
+    CUDA_ERROR_CHECK(cudaMemcpy(v, data_p, sizeof(T) * size_p, cudaMemcpyDeviceToHost));
 }
 
 template <typename T>
 void CudaVector<T>::copyToAsync(T *v, cudaStream_t stream) {
-    cudaMemcpyAsync(v, data_p, sizeof(T) * size_p, cudaMemcpyDeviceToHost, stream);
+    CUDA_ERROR_CHECK(cudaMemcpyAsync(v, data_p, sizeof(T) * size_p, cudaMemcpyDeviceToHost, stream));
 }
 
 template <typename T>
 CudaVector<T>::~CudaVector() {
     if(data_p){
         cudaFree(data_p);
-        //printf("cudaFree at %p\n", data_p);
+        
+        #ifdef MEM_DEBUG
+        printf("cudaFree at %p\n", data_p);
+        #endif
     }
 }
 

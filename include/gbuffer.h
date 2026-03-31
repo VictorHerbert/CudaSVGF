@@ -10,59 +10,36 @@
 
 
 template<typename T>
-struct CpuGBuffer : GBuffer<T> {
+struct CpuGFrame : GFrame<T> {
     Image renderImg, normalImg, albedoImg;
     CpuVector<T> renderVec, albedoVec, normalVec, denoisedVec;
     CpuVector<T> bufferVec;
 
-    CpuGBuffer(){};
-    CpuGBuffer (int2 shape);
-    CpuGBuffer (std::string filepath);
+    CpuGFrame(){};
+    CpuGFrame (int2 shape);
+    CpuGFrame (std::string filepath);
 
     void resize(int2 shape);
-    void openImages(std::string filepath);
-
-    void atrousFilterCpu(FilterParams params);
-    float snr();
-    void saveDenoised(std::string filepath);
 };
 
 template<typename T>
-struct CudaGBuffer : GBuffer<T> {
+struct CudaGFrame : GFrame<T> {
     CudaVector<T> renderVec, albedoVec, normalVec, denoisedVec;
     CudaVector<T> bufferVec;
 
-    CudaGBuffer(){};
-    CudaGBuffer (int2 shape);
+    CudaGFrame(){};
+    CudaGFrame (int2 shape);
 
     void resize(int2 shape);
-    void openImages(std::string filepath, cudaStream_t stream = 0);
 };
 
 template<typename T>
-CpuGBuffer<T>::CpuGBuffer (int2 shape){
+CpuGFrame<T>::CpuGFrame (int2 shape){
     this->resize(shape);
 }
 
 template<typename T>
-CpuGBuffer<T>::CpuGBuffer(std::string filepath){
-    openImages(filepath);
-    this->resize({renderImg.shape.x, renderImg.shape.y});
-}
-
-template<typename T>
-void CpuGBuffer<T>::openImages(std::string filepath){
-    renderImg = Image(std::regex_replace(filepath, std::regex("\\$channel\\$"), "render"), 4);
-    normalImg = Image(std::regex_replace(filepath, std::regex("\\$channel\\$"), "normal"), 4);
-    albedoImg = Image(std::regex_replace(filepath, std::regex("\\$channel\\$"), "albedo"), 4);
-
-    this->render = (T*) renderImg.data;
-    this->normal = (T*) normalImg.data;
-    this->albedo = (T*) albedoImg.data;
-}
-
-template<typename T>
-void CpuGBuffer<T>::resize(int2 shape){
+void CpuGFrame<T>::resize(int2 shape){
     int size = totalSize(shape);
     this->shape = shape;
     denoisedVec.resize(size);
@@ -74,17 +51,12 @@ void CpuGBuffer<T>::resize(int2 shape){
 }
 
 template<typename T>
-void CpuGBuffer<T>::saveDenoised(std::string filepath){
-    Image::save(filepath, (byte*) this->denoised, {this->shape.x, this->shape.y, 4});
-}
-
-template<typename T>
-CudaGBuffer<T>::CudaGBuffer (int2 shape){
+CudaGFrame<T>::CudaGFrame (int2 shape){
     this->resize(shape);
 }
 
 template<typename T>
-void CudaGBuffer<T>::resize(int2 shape){
+void CudaGFrame<T>::resize(int2 shape){
     int size = totalSize(shape);
     this->shape = shape;
     renderVec.resize(size);

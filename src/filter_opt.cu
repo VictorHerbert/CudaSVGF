@@ -10,7 +10,7 @@
 #include <assert.h>
 #include <cuda_runtime.h>
 
-CUDA_CPU_FUNC void atrousFilterPixelOpt(int2 pos, const uchar4* in, uchar4* out, int level, GBuffer<uchar4> frame, FilterParams params){
+CUDA_CPU_FUNC void atrousFilterPixelOpt(int2 pos, const uchar4* in, uchar4* out, int level, GFrame<uchar4> frame, FilterParams params){
     const float waveletSpline[3] = {3.0/8.0, 1.0/4.0, 1.0/16.0};
 
     float3 acum = {0, 0, 0};
@@ -20,7 +20,7 @@ CUDA_CPU_FUNC void atrousFilterPixelOpt(int2 pos, const uchar4* in, uchar4* out,
     int memIdx = flattenIndex(pos, frame.shape);
 
     float3 refRender   = make_float3(in[memIdx]);
-    float3 refNormal   = make_float3(frame.normal[memIdx]);
+    float3 refNormal   = parseNormal(frame.normal[memIdx]);
     float3 refAlbedo   = make_float3(frame.albedo[memIdx]);
 
     for(dPos.x = -ATROUS_RADIUS; dPos.x <= ATROUS_RADIUS; dPos.x++){
@@ -37,8 +37,8 @@ CUDA_CPU_FUNC void atrousFilterPixelOpt(int2 pos, const uchar4* in, uchar4* out,
             float3 nAlbedo = make_float3(frame.albedo[nMemIdx]);
             float dAlbedo = length(refAlbedo - nAlbedo);
 
-            float3 nNormal = make_float3(frame.normal[nMemIdx]);
-            float dNormal = dot(refNormal, nNormal);
+            float3 nNormal = parseNormal(frame.normal[nMemIdx]);
+            float dNormal = 1-dot(refNormal, nNormal);
 
             float dSpace = length(make_float2(dPos));
 
@@ -62,7 +62,7 @@ CUDA_CPU_FUNC void atrousFilterPixelOpt(int2 pos, const uchar4* in, uchar4* out,
 }
 
 
-KERNEL void atrousFilterCudaKernelOpt(const uchar4* in, uchar4* out, int level, GBuffer<uchar4> frame, FilterParams params){
+KERNEL void atrousFilterCudaKernelOpt(const uchar4* in, uchar4* out, int level, GFrame<uchar4> frame, FilterParams params){
     int2 framePos = {blockIdx.x * blockDim.x + threadIdx.x, blockIdx.y * blockDim.y + threadIdx.y};
 
     if(framePos.x >= frame.shape.x || framePos.y >= frame.shape.y)
@@ -71,7 +71,12 @@ KERNEL void atrousFilterCudaKernelOpt(const uchar4* in, uchar4* out, int level, 
     atrousFilterPixelOpt(framePos, in, out, level, frame, params);
 }
 
-void atrousFilterCudaOpt(GBuffer<uchar4> frame, int depth, FilterParams params, cudaStream_t stream){
+void atrousFilterCudaOpt(GFrame<uchar4> frame, int depth, FilterParams params, cudaStream_t stream){
+    float c = 441.672956;
+    
+    params.sigmaAlbedo *= c;
+    params.sigmaRender *= c;
+
     for(int i = 0; i < depth; i++){
         dim3 blockShape;
         dim3 gridShape((frame.shape.x + blockShape.x-1) / blockShape.x, (frame.shape.y + blockShape.y-1) / blockShape.y);
