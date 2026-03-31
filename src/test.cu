@@ -12,79 +12,117 @@
 
 #include <iostream>
 
-FuncVector registered_funcs;
-
 void test() {
-    printf("----------------------------------------------------------\n");
-    for (auto& [name, func] : registered_funcs) {
-        try {
-            func();
-            printf("\033[33mTEST \033[0m \033[1m%-30s\033[0m \033[32mPASSED\033[0m\n", name.c_str());
-        }
-        catch (const std::runtime_error& e) {
-            printf("\033[33mTEST \033[0m \033[1m%-30s\033[0m \033[31mFAIL\033[0m\n", name.c_str());
-            printf("%s\n", e.what());
-        }
-        catch (...) {
-            printf("Failed\n");
-        }
-        printf("----------------------------------------------------------\n");
-    }
-}
 
 // --------------------------------------------------------------------------------------------------------------
 
-TEST(device_stats){
-    printGPUProperties();
-}
-
-
-// --------------------------------------------------------------------------------------------------------------
-
-TEST(filter_cpu){
-
-}
-
-// --------------------------------------------------------------------------------------------------------------
-
-TEST(filter_cuda){
-
-}
-
-// --------------------------------------------------------------------------------------------------------------
-
-TEST(image_cpu){
-
-}
-
-// --------------------------------------------------------------------------------------------------------------
-
-TEST(image_cuda){
-
-}
-
-// --------------------------------------------------------------------------------------------------------------
-
-SKIP(video_cpu){
-    benchmark("video_cpu", [&]{
-        videoFilterCpu(
-            "render/sponza/$channel$/$i$.png",
-            "test/cpu/$i$.png",
-            {1920, 1080},
-            2
-        );
+    CHECK("device_stats", [&]{
+        SKIP();
+        printGPUProperties();
     });
-}
 
 // --------------------------------------------------------------------------------------------------------------
 
-TEST(video_cuda){
-    benchmark("video_cuda", [&]{
+    int2 shape = {1920, 1080};
+    //int2 shape = {512, 512};
+    
+    auto blockSizes = {dim3(32), dim3(32, 4)};
+    auto depths = {1,2,5,10};
+
+    int depth = 5;
+
+//--------------------------------------------------------------------------------------------------------------
+
+    CHECK("cpu_atrous", [&]{
+        SKIP();
+
+        //int2 shape = {512, 512};
+        CpuGBuffer<uchar3> cpuFrame(shape);
+        cpuFrame.openImages("render/sponza/$channel$/1.png");
+
+        BENCH("cpu_atrous", [&]{
+            atrousFilterCpu(cpuFrame, 5);
+        });
+
+    });
+
+// --------------------------------------------------------------------------------------------------------------
+
+    CHECK("cuda_atrous_base", [&]{
+        //SKIP();
+
+        CudaGBuffer<uchar3> frame(shape);
+
+        for(dim3 blockSize : blockSizes){
+            dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+
+            BENCH("cuda_atrous_base3 dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
+                atrousFilterCudaKernelBase<<<gridSize, blockSize>>>(frame.render, frame.denoised, depth, frame);
+                cudaDeviceSynchronize();
+            });
+        }
+    });
+
+    CHECK("cuda_atrous_uchar4", [&]{
+        //SKIP();
+
+        CudaGBuffer<uchar4> frame(shape);
+
+        for(dim3 blockSize : blockSizes){
+            dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+
+            BENCH("cuda_atrous_base4 dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
+                atrousFilterCudaKernelU4<<<gridSize, blockSize>>>(frame.render, frame.denoised, depth, frame);
+                cudaDeviceSynchronize();
+            });
+        }
+    });
+
+    CHECK("cuda_atrous_O3", [&]{
+        //SKIP();
+
+        CudaGBuffer<uchar4> frame(shape);
+
+        for(dim3 blockSize : blockSizes){
+            dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+
+            BENCH("cuda_atrous_O3 dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
+                atrousFilterCudaKernelO3<<<gridSize, blockSize>>>(frame.render, frame.denoised, depth,frame);
+                cudaDeviceSynchronize();
+            });
+        }
+    });
+
+    CHECK("cuda_atrous_aprox", [&]{
+        //SKIP();
+
+        CudaGBuffer<uchar4> frame(shape);
+
+        for(dim3 blockSize : blockSizes){
+            dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+
+            BENCH("cuda_atrous_opt dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
+                atrousFilterCudaKernelOpt<<<gridSize, blockSize>>>(frame.render, frame.denoised, depth, frame);
+                cudaDeviceSynchronize();
+            });
+        }
+    });
+
+// --------------------------------------------------------------------------------------------------------------
+
+    CHECK("video_cuda", [&]{
         videoFilterCuda(
             "render/sponza/$channel$/$i$.png",
-            "test/cuda/$i$.png",
-            {1920, 1080},
+            "render/sponza/output/$i$.png",
+            shape,
             5
         );
     });
+
+// --------------------------------------------------------------------------------------------------------------
+
+    CHECK("params_exploration", [&]{
+        SKIP();
+    });
+
 }

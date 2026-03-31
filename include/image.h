@@ -19,7 +19,7 @@ struct Image {
 
     Image(byte* data, int3 shape);
 
-    Image(std::string filename, int channels);
+    Image(std::string filename, int channels = 4);
 
     ~Image();
 

@@ -3,6 +3,8 @@
 #include <regex>
 #include <string>
 
+int depth = 5; // TODO
+
 void videoFilterCpu(
     std::string filepath,
     std::string outputPath,
@@ -10,27 +12,27 @@ void videoFilterCpu(
     int frameCount,
     FilterParams params
 ){        
-    CpuGBuffer buffer;
+    CpuGBuffer<uchar3> buffer;
     buffer.shape = shape;
-    CpuVector<uchar4> denoised(totalSize(shape));
-    CpuVector<uchar4> bufferVec(2*totalSize(shape));
+    CpuVector<uchar3> denoised(totalSize(shape));
+    CpuVector<uchar3> bufferVec(2*totalSize(shape));
     buffer.denoised = denoised.data();
     buffer.buffer[0] = bufferVec.data();
     buffer.buffer[1] = bufferVec.data() + totalSize(shape);
 
     for(int i = 1; i < frameCount; i++){
-        printf("%d frame\n", i);
         auto framePath = std::regex_replace(filepath, std::regex("\\$i\\$"), std::to_string(i));
 
-        Image renderImg = Image(std::regex_replace(framePath, std::regex("\\$channel\\$"), "render"), 4);
-        Image normalImg = Image(std::regex_replace(framePath, std::regex("\\$channel\\$"), "normal"), 4);
-        Image albImg = Image(std::regex_replace(framePath, std::regex("\\$channel\\$"), "albedo"), 4);
+        Image renderImg = Image(std::regex_replace(framePath, std::regex("\\$channel\\$"), "render"), 3);
+        Image normalImg = Image(std::regex_replace(framePath, std::regex("\\$channel\\$"), "normal"), 3);
+        Image albImg = Image(std::regex_replace(framePath, std::regex("\\$channel\\$"), "albedo"), 3);
 
-        buffer.render = (uchar4*) renderImg.data;
-        buffer.normal = (uchar4*) normalImg.data;
-        buffer.albedo = (uchar4*) albImg.data;
+        buffer.render = (uchar3*) renderImg.data;
+        buffer.normal = (uchar3*) normalImg.data;
+        buffer.albedo = (uchar3*) albImg.data;
 
-        atrousFilterCpu(buffer, params);
+
+        atrousFilterCpu(buffer, depth, params);
 
         Image::save(
             std::regex_replace(outputPath, std::regex("\\$i\\$"), std::to_string(i)),
@@ -58,7 +60,7 @@ void videoFilterCuda(
     int streamCount = min(maxStreamCount, frameCount);
 
     cudaStream_t streams[MAX_STREAM];
-    CudaGBuffer frames[MAX_STREAM];
+    CudaGBuffer<uchar4> frames[MAX_STREAM];
     CpuVector<uchar4> denoised[MAX_STREAM];
 
     for(int i = 0; i < streamCount; i++){
@@ -98,7 +100,7 @@ void videoFilterCuda(
             frames[streamIdx].normalVec.copyFromAsync((uchar4*) normalImg.data, size, stream);
             frames[streamIdx].albedoVec.copyFromAsync((uchar4*) albImg.data, size, stream);
 
-            atrousFilterCudaBase<<<defaultGridSize, defaultBlockSize, cacheUsage, stream>>>(frames[streamIdx], params);
+            atrousFilterCudaOpt(frames[streamIdx], depth, params, stream);
             CUDA_ERROR_CHECK(cudaGetLastError());
 
             frames[streamIdx].denoisedVec.copyToAsync(denoised[streamIdx].data(), stream);
@@ -108,3 +110,7 @@ void videoFilterCuda(
     for(int i = 0; i < streamCount; i++)
         cudaStreamDestroy(streams[i]);
 }
+
+
+
+

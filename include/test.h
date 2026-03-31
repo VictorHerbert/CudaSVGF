@@ -6,31 +6,64 @@
 #include <chrono>
 #include <iostream>
 
-typedef std::vector<std::pair<std::string, std::function<void()>>> FuncVector;
+#include <cuda_runtime.h>
 
-#define TEST(func_name) \
-    void func_name(); \
-    struct func_name##_registrar { \
-        func_name##_registrar() { \
-            registered_funcs.push_back({#func_name, func_name}); \
-        } \
-    } func_name##_instance; \
-    void func_name()
-
-#define SKIP(func_name) \
-    void func_name()
 
 void test();
 
+class test_skip : public std::exception {};
+#define SKIP() throw test_skip()
+
 template<typename F>
-void benchmark(const std::string label, F&& func) {
-    auto start = std::chrono::high_resolution_clock::now();
-    func();
-    auto end = std::chrono::high_resolution_clock::now();
+void BENCH(const std::string& label, F&& func, int it = 1) {
+    for(int i = 0; i < it; i++){
+        auto cpu_start = std::chrono::high_resolution_clock::now();
 
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        cudaEvent_t start, stop;
+        cudaEventCreate(&start);
+        cudaEventCreate(&stop);
 
-    std::cout << "\033[33mBENCH\033[0m " << label << ": " << elapsed.count() << " ms\n";
+        cudaEventRecord(start);
+
+        func();
+
+        cudaEventRecord(stop);
+        cudaEventSynchronize(stop);
+
+        auto cpu_end = std::chrono::high_resolution_clock::now();
+
+        float gpu_ms = 0.0f;
+        cudaEventElapsedTime(&gpu_ms, start, stop);
+
+        auto cpu_ms = std::chrono::duration_cast<std::chrono::milliseconds>(cpu_end - cpu_start).count();
+
+        printf("\033[33mBENCH\033[0m it %d \033[1m%-40s\033[0m\033[0m GPU \033[32m%.2f ms\033[0m\n",
+            i, label.c_str(), gpu_ms);
+
+        cudaEventDestroy(start);
+        cudaEventDestroy(stop);
+    }
+}
+
+template<typename F>
+void CHECK(const std::string label, F&& func) {
+    printf("----------------------------------------------------------\n");
+    try {
+        func();
+        printf("\033[33mTEST \033[0m \033[1m%-40s\033[0m \033[32mPASSED\033[0m\n", label.c_str());
+    }
+    catch (const test_skip& e) {
+        printf("\033[33mTEST \033[0m \033[1m%-40s\033[0m \033[30mSKIP\033[0m\n", label.c_str());        
+    }
+    catch (const std::runtime_error& e) {
+        printf("\033[33mTEST \033[0m \033[1m%-40s\033[0m \033[31mFAIL\033[0m\n", label.c_str());
+        printf("%s\n", e.what());
+    }
+    catch (...) {
+        printf("Failed\n");
+    }
+    printf("----------------------------------------------------------\n");
+
 }
 
 #endif
