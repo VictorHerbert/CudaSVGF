@@ -1,13 +1,22 @@
 #ifndef GBUFFER_H
 #define GBUFFER_H
 
-#include "primitives.h"
 #include "image.h"
-#include "extended_math.h"
+#include "math_utils.h"
 
 #include <regex>
 #include <cuda_runtime.h>
 
+template<typename T>
+struct GFrame {
+    int2 shape;
+    T* render = nullptr;
+    T* normal = nullptr;
+    T* albedo = nullptr;
+    T* denoised = nullptr;
+    T* buffer[2] = {nullptr, nullptr};
+    T* golden;
+};
 
 template<typename T>
 struct CpuGFrame : GFrame<T> {

@@ -1,16 +1,16 @@
 #include "filter.cuh"
 
 #include "image.h"
-#include "utils.h"
+#include "cuda_utils.h"
 
-#include "extended_math.h"
+#include "math_utils.h"
 
 #include <regex>
 #include <iostream>
 #include <assert.h>
 #include <cuda_runtime.h>
 
-CUDA_CPU_FUNC void atrousFilterPixelU4(int2 pos, const uchar4* in, uchar4* out, int level, GFrame<uchar4> frame, FilterParams params){
+CUDA_FUNC void atrousFilterPixelU4(int2 pos, const uchar4* in, uchar4* out, int level, GFrame<uchar4> frame, FilterParams params){
     const float waveletSpline[3] = {3.0/8.0, 1.0/4.0, 1.0/16.0};
 
     float3 acum = {0, 0, 0};

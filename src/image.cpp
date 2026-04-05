@@ -1,6 +1,6 @@
 #include "image.h"
-#include "utils.h"
-#include "extended_math.h"
+#include "cuda_utils.h"
+#include "math_utils.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -17,18 +17,6 @@ Image::Image(){
     shape = {0,0,0};
     data = nullptr;
 }
-
-Image::Image(int3 shape){
-    this->shape = shape;
-    // TODO check if pinned memory needed
-    data = (byte*) malloc(totalSize(shape));
-}
-
-/*Image::Image(byte* data, int3 shape){
-    this->shape = shape;
-    // TODO check if deep copy is needed, risc of double free
-    this->data = data;
-}*/
 
 Image::Image(std::string filename, int channels){
     int dummy;

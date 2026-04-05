@@ -1,4 +1,4 @@
-#include "video.cuh"
+#include "animation.cuh"
 
 #include <regex>
 #include <string>
@@ -103,7 +103,7 @@ void videoFilterCuda(
             frames[streamIdx].normalVec.copyFromAsync((uchar4*) normalImg.data, size, streams[streamIdx]);
             frames[streamIdx].albedoVec.copyFromAsync((uchar4*) albImg.data, size, streams[streamIdx]);
 
-            atrousFilterCudaOpt(frames[streamIdx], depth, params, streams[streamIdx]);
+            atrousFilterCudaAprox(frames[streamIdx], depth, params, streams[streamIdx]);
 
             frames[streamIdx].denoisedVec.copyToAsync(denoised[streamIdx].data(), streams[streamIdx]);
         }

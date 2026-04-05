@@ -3,9 +3,6 @@
 
 #include "third_party/helper_math.h"
 
-#include <type_traits>
-
-
 // Operators
 
 inline CUDA_CPU_FUNC uchar3 operator-(const uchar3 &a, const uchar3 &b) {
@@ -61,28 +58,8 @@ inline CUDA_CPU_FUNC T make_type(const U &v){
 
 // Utils
 
-inline CUDA_CPU_FUNC float length2(const uchar4 &v){
-    return 
-        float(v.x) * float(v.x) +
-        float(v.y) * float(v.y) +
-        float(v.z) * float(v.z);
-}
-
-inline CUDA_CPU_FUNC float length2(const float3 &v){
-    return 
-        float(v.x) * float(v.x) +
-        float(v.y) * float(v.y) +
-        float(v.z) * float(v.z);
-}
-
-
-
 inline CUDA_CPU_FUNC int totalSize(int2 shape){
     return shape.x * shape.y;
-}
-
-inline CUDA_CPU_FUNC int totalSize(int3 shape){
-    return shape.x * shape.y * shape.z;
 }
 
 inline CUDA_CPU_FUNC int inRange(int pos, int shape){
@@ -100,7 +77,6 @@ inline CUDA_CPU_FUNC int flattenIndex(int2 p, int2 shape){
 inline CUDA_CPU_FUNC int2 indexToPos(int p, int2 shape){
     return {p%shape.x, p/shape.x};
 }
-
 
 template <typename T>
 inline CUDA_CPU_FUNC float3 parseNormal(T v){

@@ -1,13 +1,14 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "utils.h"
+#include "cuda_utils.h"
 #include "vector.h"
 
 #include <cuda_runtime.h>
 #include <string>
 #include <vector>
 
+typedef unsigned char byte;
 
 struct Image {
     int3 shape;

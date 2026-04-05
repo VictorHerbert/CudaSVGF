@@ -60,18 +60,31 @@ def run_cuda_svgf(props):
         print("CudaSVGF executable not found:", exe_path)
         return 1
 
+    scene = bpy.context.scene
+
+    res_x = int(scene.render.resolution_x * scene.render.resolution_percentage / 100.0)
+    res_y = int(scene.render.resolution_y * scene.render.resolution_percentage / 100.0)
+
+    frame_count = scene.frame_end - scene.frame_start + 1
+
     args = [
         exe_path,
+        props.output_path,
+        str(res_x),
+        str(res_y),
+        str(props.depth),
+        str(frame_count),
         str(props.sigma_spatial),
         str(props.sigma_render),
         str(props.sigma_albedo),
         str(props.sigma_normal),
-        props.output_path
     ]
 
     result = subprocess.run(args, capture_output=True, text=True)
+
     print(result.stdout)
     print(result.stderr)
+
     return result.returncode
 
 
@@ -80,10 +93,13 @@ def run_cuda_svgf(props):
 # ----------------------------
 
 class CudaSVGFProps(bpy.types.PropertyGroup):
+
     sigma_spatial: bpy.props.FloatProperty(name="Sigma Spatial", min=1, max=10.0, default=1)
     sigma_render: bpy.props.FloatProperty(name="Sigma Render", min=5, max=30.0, default=5)
-    sigma_albedo: bpy.props.FloatProperty(name="Sigma Albedo", min=0.05, max=.25, default=0.05)
+    sigma_albedo: bpy.props.FloatProperty(name="Sigma Albedo", min=0.05, max=0.25, default=0.05)
     sigma_normal: bpy.props.FloatProperty(name="Sigma Normal", min=0.01, max=0.1, default=0.01)
+
+    depth: bpy.props.IntProperty(name="Depth", min=1, max=64, default=8)
 
     output_path: bpy.props.StringProperty(name="Output Path", subtype='FILE_PATH', default="")
     executable_path: bpy.props.StringProperty(name="CUDA Executable", subtype='FILE_PATH', default="")
@@ -139,6 +155,7 @@ class CUDASVGF_PT_panel(bpy.types.Panel):
         layout = self.layout
         props = context.scene.cudasvgf_props
 
+        layout.label(text="SVGF Parameters")
         layout.prop(props, "sigma_spatial")
         layout.prop(props, "sigma_render")
         layout.prop(props, "sigma_albedo")
@@ -146,6 +163,12 @@ class CUDASVGF_PT_panel(bpy.types.Panel):
 
         layout.separator()
 
+        layout.label(text="Pipeline")
+        layout.prop(props, "depth")
+
+        layout.separator()
+
+        layout.label(text="IO")
         layout.prop(props, "output_path")
         layout.prop(props, "executable_path")
 

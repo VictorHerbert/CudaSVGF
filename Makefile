@@ -5,7 +5,7 @@
 NVCC = nvcc
 CXX = $(NVCC)
 
-CXXFLAGS_LK = -w -lineinfo -O3 -rdc=true -std=c++17 -arch=sm_75 -I./include 
+CXXFLAGS_LK = -w -lineinfo -O3 -rdc=true -std=c++17 -arch=sm_75 -I./include
 #CXXFLAGS_LK = -w -G -g -rdc=true -std=c++17 -arch=sm_75 -I./include
 CXXFLAGS = $(CXXFLAGS_LK) -dc
 
@@ -44,11 +44,12 @@ TARGET = $(BUILD_DIR)/main
 #                               Build Rules
 # ===========================================================================
 
-$(BUILD_DIR)/filter_opt.o: CXXFLAGS += --use_fast_math
-
 $(TARGET): $(OBJ)
 	@echo "Linking $^ into $@"
 	@$(NVCC) $(CXXFLAGS_LK) -o $@ $^ $(LDFLAGS)
+
+$(BUILD_DIR)/filter_no_opt.o: CXXFLAGS += -G
+$(BUILD_DIR)/filter_aprox.o: CXXFLAGS += --use_fast_math
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@printf "Recompiling %-20s into %s\n" "$<" "$@"
@@ -58,11 +59,9 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cu
 	@printf "Recompiling %-20s into %s\n" "$<" "$@"
 	@$(NVCC) $(CXXFLAGS) -M -MT $@ $< > $(BUILD_DIR)/$*.d
-	@$(NVCC) $(CXXFLAGS) -c $< -o $@
+	$(NVCC) $(CXXFLAGS) -c $< -o $@
 	@$(NVCC) $(CXXFLAGS) -cubin $< -o $(BUILD_DIR)/$*.cubin
 	@nvdisasm $(BUILD_DIR)/$*.cubin > $(BUILD_DIR)/$*.sass
-
-
 
 
 # ===========================================================================
@@ -75,7 +74,7 @@ test: $(TARGET)
 	@./$(TARGET) -t
 
 cli: $(TARGET)
-	@./$(TARGET) render/cornell/ 512 512 10 24 100 100 100 100
+	@./$(TARGET) render/cornell/ 512 512 24 10 100 100 100 100
 
 check: $(CSAN_TOOLS)
 

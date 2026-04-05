@@ -11,8 +11,6 @@
 #define CUDA_CPU_FUNC __device__ __host__
 #define LAUNCHER
 
-typedef unsigned char byte;
-
 //#define MEM_DEBUG
 
 #define CUDA_ERROR_CHECK(result) \
@@ -32,7 +30,6 @@ do { \
     (kernel) \
     CUDA_ERROR_CHECK(cudaGetLastError()); \
 } while(0)
-
 
 void printGPUProperties();
 

@@ -8,7 +8,6 @@
 
 #include <cuda_runtime.h>
 
-
 void test();
 
 class test_skip : public std::exception {};

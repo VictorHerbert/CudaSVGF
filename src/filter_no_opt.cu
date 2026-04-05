@@ -10,7 +10,7 @@
 #include <assert.h>
 #include <cuda_runtime.h>
 
-CUDA_FUNC void atrousFilterPixelBase(int2 pos, const uchar3* in, uchar3* out, int level, GFrame<uchar3> frame, FilterParams params){
+CUDA_FUNC void atrousFilterPixelNoOpt(int2 pos, const uchar3* in, uchar3* out, int level, GFrame<uchar3> frame, FilterParams params){
     const float waveletSpline[3] = {3.0/8.0, 1.0/4.0, 1.0/16.0};
 
     float3 acum = {0, 0, 0};
@@ -60,21 +60,21 @@ CUDA_FUNC void atrousFilterPixelBase(int2 pos, const uchar3* in, uchar3* out, in
 }
 
 
-KERNEL void atrousFilterCudaKernelBase(const uchar3* in, uchar3* out, int level, GFrame<uchar3> frame, FilterParams params){
+KERNEL void atrousFilterCudaKernelNoOpt(const uchar3* in, uchar3* out, int level, GFrame<uchar3> frame, FilterParams params){
     int2 framePos = {blockIdx.x * blockDim.x + threadIdx.x, blockIdx.y * blockDim.y + threadIdx.y};
 
     if(framePos.x >= frame.shape.x || framePos.y >= frame.shape.y)
         return;
 
-    atrousFilterPixelBase(framePos, in, out, level, frame, params);
+    atrousFilterPixelNoOpt(framePos, in, out, level, frame, params);
 }
 
-void atrousFilterCudaBase(GFrame<uchar3> frame, int depth, FilterParams params, cudaStream_t stream){
+void atrousFilterCudaNoOpt(GFrame<uchar3> frame, int depth, FilterParams params, cudaStream_t stream){
     for(int i = 0; i < depth; i++){
         dim3 blockShape;
         dim3 gridShape((frame.shape.x + blockShape.x-1) / blockShape.x, (frame.shape.y + blockShape.y-1) / blockShape.y);
 
-        atrousFilterCudaKernelBase<<<gridShape, blockShape, 0, stream>>>(
+        atrousFilterCudaKernelNoOpt<<<gridShape, blockShape, 0, stream>>>(
             (i == 0) ? frame.render : frame.buffer[i%2],
             (i == depth-1) ? frame.denoised : frame.buffer[(i+1)%2],
             i, frame, params
