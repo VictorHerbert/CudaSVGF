@@ -33,4 +33,5 @@ do { \
 
 void printGPUProperties();
 
+
 #endif

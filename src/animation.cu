@@ -68,47 +68,60 @@ void videoFilterCuda(
     int streamCount = min(maxStreamCount, frameCount);
 
     cudaStream_t streams[MAX_STREAM];
+    cudaEvent_t events[MAX_STREAM];
     CudaGFrame<uchar4> frames[MAX_STREAM];
     CpuVector<uchar4> denoised[MAX_STREAM];
 
+    cudaStream_t stream_write;
+    cudaStreamCreate(&stream_write);
+
     for(int i = 0; i < streamCount; i++){
         cudaStreamCreate(&streams[i]);
+        cudaEventCreate(&events[i]);
         denoised[i].resize(size);
         frames[i].resize(shape);
     }
 
     for(int i = 0; i < frameCount + streamCount; i++){
         int streamIdx = i%streamCount;
-        //cudaStream_t stream = streams[streamIdx];
+        cudaStream_t stream = streams[streamIdx];
+        cudaEvent_t event = events[streamIdx];
         Image renderImg, normalImg, albImg;
 
         if(i < frameCount){
             renderImg = Image(filepath + "Render" + paddedNumber(i+1, 4) + ".png", 4);
             normalImg = Image(filepath + "Normal" + paddedNumber(i+1, 4) + ".png", 4);
             albImg    = Image(filepath + "Albedo" + paddedNumber(i+1, 4) + ".png", 4);
+
+            frames[streamIdx].renderVec.copyFromAsync((uchar4*) renderImg.data, size, stream);
+            frames[streamIdx].normalVec.copyFromAsync((uchar4*) normalImg.data, size, stream);
+            frames[streamIdx].albedoVec.copyFromAsync((uchar4*) albImg.data, size, stream);
+
+            atrousFilterCudaAprox(frames[streamIdx], depth, params, stream);
         }
 
         if(i >= streamCount){
-            cudaStreamSynchronize(streams[streamIdx]);
+            cudaEventSynchronize(event);
+
+            cudaEventRecord(event, stream_write);
 
             Image::save(
                 filepath + "Denoised" + paddedNumber(i+1-streamCount, 4) + ".png",
                 (byte*) denoised[streamIdx].data(),
                 {shape.x, shape.y, 4}
             );
+            
+            cudaEventSynchronize(event);
         }
 
         if(i < frameCount){
-            frames[streamIdx].renderVec.copyFromAsync((uchar4*) renderImg.data, size, streams[streamIdx]);
-            frames[streamIdx].normalVec.copyFromAsync((uchar4*) normalImg.data, size, streams[streamIdx]);
-            frames[streamIdx].albedoVec.copyFromAsync((uchar4*) albImg.data, size, streams[streamIdx]);
-
-            atrousFilterCudaAprox(frames[streamIdx], depth, params, streams[streamIdx]);
-
-            frames[streamIdx].denoisedVec.copyToAsync(denoised[streamIdx].data(), streams[streamIdx]);
+            frames[streamIdx].denoisedVec.copyToAsync(denoised[streamIdx].data(), stream);
+            cudaEventRecord(event, stream);
         }
     }
 
-    for(int i = 0; i < streamCount; i++)
+    for(int i = 0; i < streamCount; i++){
         cudaStreamDestroy(streams[i]);
+        cudaEventDestroy(events[i]);
+    }
 }

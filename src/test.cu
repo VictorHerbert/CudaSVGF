@@ -34,8 +34,6 @@ void test() {
 
     CHECK("cpu_atrous", [&]{
         SKIP();
-
-        //int2 shape = {512, 512};
         CpuGFrame<uchar3> cpuFrame(shape);
 
         BENCH("cpu_atrous", [&]{
@@ -92,7 +90,7 @@ void test() {
     });
 
     CHECK("cuda_atrous_aprox", [&]{
-        //SKIP();
+        SKIP();
 
         CudaGFrame<uchar4> frame(shape);
 
@@ -107,7 +105,7 @@ void test() {
     });
 
     CHECK("cuda_atrous_tile", [&]{
-        //SKIP();
+        SKIP();
 
         CudaGFrame<uchar4> frame(shape);
 
@@ -126,7 +124,7 @@ void test() {
     });
 
     CHECK("cuda_atrous_tile_aligned", [&]{
-        //SKIP();
+        SKIP();
 
         CudaGFrame<uchar4> frame(shape);
 
@@ -148,10 +146,21 @@ void test() {
 
 // --------------------------------------------------------------------------------------------------------------
 
+    CHECK("image_io", [&]{
+        SKIP();
+        BENCH("image_read_512", [&]{volatile Image img("render/cornell/Render0001.png");});
+        Image img_512("render/cornell/Render0001.png");
+        BENCH("image_save_512", [&]{img_512.save("build/img_save512.png");});
+
+        BENCH("image_read_hd", [&]{volatile Image img("render/sponza/Render0001.png");});
+        Image img_hd("render/sponza/Render0001.png");
+        BENCH("image_save_hd", [&]{img_hd.save("build/img_save_hd.png");});
+    });
+
     CHECK("video_cuda", [&]{
         SKIP();
-        videoFilterCuda(
-            "render/cornell/", {512, 512}, 10, 5
-        );
+        BENCH("video_cuda_1", [&]{videoFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 1);});
+        BENCH("video_cuda_4", [&]{videoFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 4);});
+        BENCH("video_cuda_8", [&]{videoFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 8);});
     });
 }

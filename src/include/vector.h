@@ -46,7 +46,6 @@ public:
     ~CudaVector();
 };
 
-
 template <typename T>
 CudaVector<T>::CudaVector() : size_p(0), data_p(nullptr) {}
 
@@ -129,7 +128,6 @@ CudaVector<T>::~CudaVector() {
         #endif
     }
 }
-
 
 
 #endif

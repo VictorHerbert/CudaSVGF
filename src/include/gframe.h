@@ -18,6 +18,8 @@ struct GFrame {
     T* golden;
 };
 
+// --------------------------------------------------------------------------------------------------------------
+
 template<typename T>
 struct CpuGFrame : GFrame<T> {
     Image renderImg, normalImg, albedoImg;
@@ -26,18 +28,6 @@ struct CpuGFrame : GFrame<T> {
 
     CpuGFrame(){};
     CpuGFrame (int2 shape);
-    CpuGFrame (std::string filepath);
-
-    void resize(int2 shape);
-};
-
-template<typename T>
-struct CudaGFrame : GFrame<T> {
-    CudaVector<T> renderVec, albedoVec, normalVec, denoisedVec;
-    CudaVector<T> bufferVec;
-
-    CudaGFrame(){};
-    CudaGFrame (int2 shape);
 
     void resize(int2 shape);
 };
@@ -58,6 +48,18 @@ void CpuGFrame<T>::resize(int2 shape){
     this->buffer[0] = bufferVec.data();
     this->buffer[1] = bufferVec.data() + size;
 }
+
+template<typename T>
+struct CudaGFrame : GFrame<T> {
+    CudaVector<T> renderVec, albedoVec, normalVec, denoisedVec;
+    CudaVector<T> bufferVec;
+
+    CudaGFrame(){};
+    CudaGFrame (int2 shape);
+
+    void resize(int2 shape);
+};
+
 
 template<typename T>
 CudaGFrame<T>::CudaGFrame (int2 shape){
@@ -81,5 +83,8 @@ void CudaGFrame<T>::resize(int2 shape){
     this->buffer[0] = bufferVec.data();
     this->buffer[1] = bufferVec.data() + size;
 }
+
+
+// --------------------------------------------------------------------------------------------------------------
 
 #endif

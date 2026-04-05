@@ -5,8 +5,8 @@
 NVCC = nvcc
 CXX = $(NVCC)
 
-CXXFLAGS_LK = -w -lineinfo -O3 -rdc=true -std=c++17 -arch=sm_75 -I./include
-#CXXFLAGS_LK = -w -G -g -rdc=true -std=c++17 -arch=sm_75 -I./include
+CXXFLAGS_LK = -w -lineinfo -O3 -rdc=true -std=c++17 -arch=sm_75 -I./$(INCLUDE_DIR)
+#CXXFLAGS_LK = -w -G -g -rdc=true -std=c++17 -arch=sm_75 -I./$(INCLUDE_DIR)
 CXXFLAGS = $(CXXFLAGS_LK) -dc
 
 CSAN_TOOLS := memcheck racecheck synccheck initcheck
@@ -21,7 +21,7 @@ RM = rm
 SRC_DIR     = src
 BUILD_DIR   = build
 TEST_DIR   	= test
-INCLUDE_DIR = include
+INCLUDE_DIR = src/include
 
 # ===========================================================================
 #                        Source and Object Files
@@ -59,9 +59,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cu
 	@printf "Recompiling %-20s into %s\n" "$<" "$@"
 	@$(NVCC) $(CXXFLAGS) -M -MT $@ $< > $(BUILD_DIR)/$*.d
-	$(NVCC) $(CXXFLAGS) -c $< -o $@
-	@$(NVCC) $(CXXFLAGS) -cubin $< -o $(BUILD_DIR)/$*.cubin
-	@nvdisasm $(BUILD_DIR)/$*.cubin > $(BUILD_DIR)/$*.sass
+	@$(NVCC) $(CXXFLAGS) -c $< -o $@
 
 
 # ===========================================================================

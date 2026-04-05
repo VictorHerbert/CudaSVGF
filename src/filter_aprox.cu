@@ -72,11 +72,6 @@ KERNEL void atrousFilterCudaKernelAprox(const uchar4* in, uchar4* out, int level
 }
 
 void atrousFilterCudaAprox(GFrame<uchar4> frame, int depth, FilterParams params, cudaStream_t stream){
-    float c = 441.672956;
-    
-    params.sigmaAlbedo *= c;
-    params.sigmaRender *= c;
-
     for(int i = 0; i < depth; i++){
         dim3 blockShape;
         dim3 gridShape((frame.shape.x + blockShape.x-1) / blockShape.x, (frame.shape.y + blockShape.y-1) / blockShape.y);
