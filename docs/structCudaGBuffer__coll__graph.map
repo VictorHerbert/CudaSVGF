@@ -1,0 +1,5 @@
+<map id="CudaGBuffer&lt; T &gt;" name="CudaGBuffer&lt; T &gt;">
+<area shape="rect" id="Node000001" title="CUDA&#45;side G&#45;buffer implementation." alt="" coords="5,79,148,104"/>
+<area shape="rect" id="Node000002" href="$structGBuffer.html" title="Generic G&#45;buffer storing multiple render targets." alt="" coords="22,5,131,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,44,79,79,74,79,74,44"/>
+</map>

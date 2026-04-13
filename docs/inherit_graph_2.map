@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$structGBuffer.html" title="Generic G&#45;buffer storing multiple render targets." alt="" coords="5,31,115,56"/>
+<area shape="rect" id="Node000001" href="$structCpuGBuffer.html" title="CPU&#45;side G&#45;buffer implementation." alt="" coords="167,5,301,31"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="128,31,166,25,167,30,129,36"/>
+<area shape="rect" id="Node000002" href="$structCudaGBuffer.html" title="CUDA&#45;side G&#45;buffer implementation." alt="" coords="163,55,305,80"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="129,50,163,55,162,60,128,55"/>
+</map>

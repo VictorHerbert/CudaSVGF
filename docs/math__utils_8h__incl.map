@@ -1,0 +1,13 @@
+<map id="src/include/math_utils.h" name="src/include/math_utils.h">
+<area shape="rect" id="Node000001" title="Extended math utilities." alt="" coords="58,5,235,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,144,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,33,103,70,99,67,134,29"/>
+<area shape="rect" id="Node000003" href="$cuda__utils_8h.html" title="CUDA utility macros and helper functions." alt="" coords="169,86,269,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,29,201,74,197,77,155,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="88,167,155,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="206,114,148,160,145,156,203,109"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="179,167,259,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="221,112,221,153,216,153,216,112"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="283,167,405,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="239,109,315,157,312,161,236,114"/>
+</map>

@@ -1,0 +1,22 @@
+<map id="src/include/math_utils.h" name="src/include/math_utils.h">
+<area shape="rect" id="Node000001" title="Extended math utilities." alt="" coords="98,5,275,31"/>
+<area shape="rect" id="Node000002" href="$filter_8cu.html" title=" " alt="" coords="5,225,99,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,38,99,55,73,80,56,118,49,159,50,197,53,225,47,225,44,197,44,158,51,116,68,77,96,51,128,33"/>
+<area shape="rect" id="Node000003" href="$image_8cpp.html" title=" " alt="" coords="83,79,197,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,44,150,80,145,77,169,41"/>
+<area shape="rect" id="Node000004" href="$filter_8cuh.html" title="Definition of Atrous Filters." alt="" coords="159,152,311,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="198,43,211,78,234,151,229,153,205,80,193,45"/>
+<area shape="rect" id="Node000009" href="$gbuffer_8h.html" title="CPU and CUDA G&#45;buffer frame abstractions." alt="" coords="273,79,426,104"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="226,34,324,76,322,81,224,39"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="194,185,83,228,81,223,192,180"/>
+<area shape="rect" id="Node000005" href="$animation_8cuh.html" title="Animation filtering." alt="" coords="135,225,324,251"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="235,191,233,225,228,225,230,191"/>
+<area shape="rect" id="Node000008" href="$test_8cu.html" title=" " alt="" coords="314,299,403,324"/>
+<area shape="poly" id="edge9_Node000004_Node000008" title=" " alt="" coords="282,181,312,199,338,224,349,242,356,263,361,298,356,299,350,264,344,245,334,227,309,203,279,186"/>
+<area shape="rect" id="Node000006" href="$animation_8cu.html" title=" " alt="" coords="24,299,155,324"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="196,259,113,301,111,296,193,254"/>
+<area shape="rect" id="Node000007" href="$main_8cpp.html" title=" " alt="" coords="179,299,285,324"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="233,264,234,298,229,299,228,265"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="264,255,339,296,336,301,261,260"/>
+<area shape="poly" id="edge11_Node000009_Node000004" title=" " alt="" coords="321,113,255,154,252,150,318,109"/>
+</map>

@@ -1,0 +1,33 @@
+<map id="src/include/gbuffer.h" name="src/include/gbuffer.h">
+<area shape="rect" id="Node000001" title="CPU and CUDA G&#45;buffer frame abstractions." alt="" coords="315,5,469,31"/>
+<area shape="rect" id="Node000002" href="$image_8h.html" title="Image container and I/O utilities." alt="" coords="223,79,297,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="372,33,295,74,292,70,370,28"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="287,240,409,265"/>
+<area shape="poly" id="edge18_Node000001_Node000006" title=" " alt="" coords="390,32,376,79,361,160,353,227,348,226,356,159,371,78,385,30"/>
+<area shape="rect" id="Node000011" href="$math__utils_8h.html" title="Extended math utilities." alt="" coords="386,79,489,104"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="402,30,425,66,420,69,397,32"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="513,79,572,104"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="417,28,507,70,504,75,415,33"/>
+<area shape="rect" id="Node000003" href="$cuda__utils_8h.html" title="CUDA utility macros and helper functions." alt="" coords="387,159,487,185"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="287,102,400,151,398,156,285,106"/>
+<area shape="poly" id="edge11_Node000002_Node000006" title=" " alt="" coords="269,103,337,227,333,229,264,105"/>
+<area shape="rect" id="Node000007" href="$vector_8h.html" title="CPU and CUDA vector abstractions for host&#45;device memory management." alt="" coords="135,159,209,185"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="249,106,197,152,193,148,245,102"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="5,240,64,265"/>
+<area shape="poly" id="edge12_Node000002_Node000008" title=" " alt="" coords="223,106,174,126,124,154,83,192,52,230,48,227,79,188,121,150,172,121,221,102"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="199,240,262,265"/>
+<area shape="poly" id="edge13_Node000002_Node000009" title=" " alt="" coords="261,105,238,227,233,226,255,104"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="433,240,500,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="444,184,460,226,455,228,439,186"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="524,240,604,265"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="457,183,535,230,532,235,455,187"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="426,187,373,233,370,229,422,183"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="199,182,311,232,309,237,197,187"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="153,187,68,235,65,231,150,183"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="183,183,216,227,212,230,179,186"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="89,240,175,265"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="168,186,146,229,142,227,164,184"/>
+<area shape="poly" id="edge16_Node000011_Node000003" title=" " alt="" coords="440,104,440,145,435,145,435,104"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="512,152,651,192"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="460,102,536,143,534,148,457,107"/>
+</map>

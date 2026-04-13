@@ -1,0 +1,23 @@
+<map id="src/include/image.h" name="src/include/image.h">
+<area shape="rect" id="Node000001" title="Image container and I/O utilities." alt="" coords="285,5,435,31"/>
+<area shape="rect" id="Node000002" href="$cuda__utils_8h.html" title="CUDA utility macros and helper functions." alt="" coords="121,79,221,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="331,33,215,76,214,71,329,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="200,152,323,177"/>
+<area shape="poly" id="edge10_Node000001_Node000005" title=" " alt="" coords="354,33,279,142,275,139,350,30"/>
+<area shape="rect" id="Node000006" href="$vector_8h.html" title="CPU and CUDA vector abstractions for host&#45;device memory management." alt="" coords="397,79,472,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="374,29,414,67,411,71,370,33"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="347,152,405,177"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="364,31,376,138,371,139,359,31"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="541,152,603,177"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="392,28,437,49,486,76,524,108,555,140,551,143,520,112,482,81,435,53,389,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,152,72,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="151,106,73,148,71,143,148,102"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="96,152,176,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="167,106,150,141,145,138,163,103"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="187,102,237,141,234,145,184,106"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="408,106,303,149,301,144,406,102"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="427,106,396,143,392,140,423,103"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="458,102,539,143,536,148,456,106"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="430,152,517,177"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="443,103,463,139,458,141,439,106"/>
+</map>

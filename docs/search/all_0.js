@@ -1,0 +1,18 @@
+var searchData=
+[
+  ['albedo_0',['albedo',['../structGBuffer.html#a61c95d5bfbbe21d312ad402108a961a6',1,'GBuffer']]],
+  ['albedovec_1',['albedovec',['../structCpuGBuffer.html#acf207babb131610dfe098961d320bbac',1,'CpuGBuffer::albedoVec'],['../structCudaGBuffer.html#a5bb1f8e8f68663f6e29b8aa62f994f70',1,'CudaGBuffer::albedoVec']]],
+  ['aligned_2',['ALIGNED',['../filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785da897742ebff19b8080b04bdb2c4423e07',1,'filter.cuh']]],
+  ['animation_2ecu_3',['animation.cu',['../animation_8cu.html',1,'']]],
+  ['animation_2ecuh_4',['animation.cuh',['../animation_8cuh.html',1,'']]],
+  ['animationfiltercpu_5',['animationfiltercpu',['../animation_8cu.html#a6704e2d371c6b742d4b8b894a0b6edeb',1,'animationFilterCpu(std::string filepath, std::string outputPath, int2 shape, int depth, int frameCount, FilterParams params):&#160;animation.cu'],['../animation_8cuh.html#a284ea6ba958bf373eb97452ccad29fcc',1,'animationFilterCpu(std::string filepath, int2 shape, int frameCount, int depth, FilterParams params=FilterParams()):&#160;animation.cuh']]],
+  ['animationfiltercuda_6',['animationfiltercuda',['../animation_8cu.html#a9363afee68879886147922dccebec80a',1,'animationFilterCuda(std::string filepath, int2 shape, int frameCount, int depth, FilterParams params, int maxStreamCount):&#160;animation.cu'],['../animation_8cuh.html#a99b80e595c5f2d95a6483d5aeb57e00f',1,'animationFilterCuda(std::string filepath, int2 shape, int frameCount, int depth, FilterParams params=FilterParams(), int maxStreamCount=4):&#160;animation.cu']]],
+  ['aprox_7',['APROX',['../filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94fa6e77b5c6a00f59932061e07450958025',1,'filter.cuh']]],
+  ['atrous_5farea_8',['ATROUS_AREA',['../filter_8cuh.html#a77995bcc7f196bf683752a3cbae78cc1',1,'filter.cuh']]],
+  ['atrous_5fdim_9',['ATROUS_DIM',['../filter_8cuh.html#a02a6c8363a27c343485f74b61de70da6',1,'filter.cuh']]],
+  ['atrous_5fradius_10',['ATROUS_RADIUS',['../filter_8cuh.html#a6bd943edae11e9a1cdd00bd10bb6c043',1,'filter.cuh']]],
+  ['atrousfilter_11',['atrousfilter',['../filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4',1,'atrousFilter(GBuffer&lt; T &gt; frame, int depth, FilterParams params, cudaStream_t stream):&#160;filter.cu'],['../filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116',1,'atrousFilter(GBuffer&lt; T &gt; frame, int depth, FilterParams params=FilterParams(), cudaStream_t stream=0):&#160;filter.cu']]],
+  ['atrousfiltercpupass_12',['atrousfiltercpupass',['../filter_8cu.html#a991180d0f09dc42a70c54369a8515e26',1,'atrousFilterCpuPass(const T *in, T *out, int level, GBuffer&lt; T &gt; frame, FilterParams params):&#160;filter.cu'],['../filter_8cuh.html#aa2d9628713171ee03675c6ef5314d94e',1,'atrousFilterCpuPass(const T *in, T *out, int level, GBuffer&lt; T &gt; frame, FilterParams paramsparams=FilterParams()):&#160;filter.cu']]],
+  ['atrousfiltercudapass_13',['atrousfiltercudapass',['../filter_8cu.html#ad16b39fc6b5165f67428cf82f1cc34f4',1,'atrousFilterCudaPass(const T *in, T *out, int level, GBuffer&lt; T &gt; frame, FilterParams params):&#160;filter.cu'],['../filter_8cuh.html#a080d2f4674e9ff845d6377083e514bc1',1,'atrousFilterCudaPass(const T *in, T *out, int level, GBuffer&lt; T &gt; frame, FilterParams paramsparams=FilterParams()):&#160;filter.cu']]],
+  ['atrousfilterpixel_14',['atrousfilterpixel',['../filter_8cu.html#a2765591f9c7abf1b2bfb2eef47cc9828',1,'atrousFilterPixel(int2 pos, const T *in, T *out, const T *cache, int level, GBuffer&lt; T &gt; frame, FilterParams params):&#160;filter.cu'],['../filter_8cuh.html#a1f885b5ccf7ca2524670f396de814ab9',1,'atrousFilterPixel(int2 pos, const T *in, T *out, const T *cache, int level, GBuffer&lt; T &gt; frame, FilterParams paramsparams=FilterParams()):&#160;filter.cu']]]
+];
