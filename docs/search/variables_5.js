@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['render_0',['render',['../structGBuffer.html#a009bfd6d3808d7fc4bcf996dc5e6fca7',1,'GBuffer']]],
-  ['rendervec_1',['rendervec',['../structCpuGBuffer.html#a23bed630a20cb8b2e8897a6a6245bf9d',1,'CpuGBuffer::renderVec'],['../structCudaGBuffer.html#ae70b50eb0c1906f5e5709c1c25e43584',1,'CudaGBuffer::renderVec']]]
+  ['shape_0',['shape',['../structGBuffer.html#ae61f6b452e02adcf8ec8574bc9ee7b93',1,'GBuffer::shape'],['../structImage.html#ac92b94364b6f8aaae0a4a116780da7d2',1,'Image::shape']]],
+  ['sigmaalbedo_1',['sigmaAlbedo',['../structFilterParams.html#aaa73c759de4555d204fe223fbb98abd8',1,'FilterParams']]],
+  ['sigmanormal_2',['sigmaNormal',['../structFilterParams.html#a402da9d11bc801144b93406528892a71',1,'FilterParams']]],
+  ['size_5fp_3',['size_p',['../structCudaVector.html#a79684396b3a3b6953b227afa14218c25',1,'CudaVector']]]
 ];

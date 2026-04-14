@@ -2,41 +2,6 @@
 #include "cuda_utils.h"
 #include "math_utils.h"
 
-
-void* cuda_malloc(size_t size) {
-    void* ptr = NULL;
-    if (cudaMallocHost(&ptr, size) != cudaSuccess)
-        return NULL;
-    return ptr;
-}
-
-
-void* cuda_realloc(void* ptr, size_t old_size, size_t new_size) {
-    if (ptr == NULL) {
-        return cuda_malloc(new_size);
-    }
-
-    if (new_size == 0) {
-        cudaFreeHost(ptr);
-        return NULL;
-    }
-
-    void* new_ptr = cuda_malloc(new_size);
-    if (new_ptr == NULL) {
-        return NULL;
-    }
-
-    size_t copy_size = old_size < new_size ? old_size : new_size;
-    cudaMemcpy(new_ptr, ptr, copy_size, cudaMemcpyHostToHost);
-
-    cudaFreeHost(ptr);
-    return new_ptr;
-}
-
-//#define STBI_MALLOC(sz)                     cuda_malloc(sz)
-//#define STBI_REALLOC_SIZED(p,oldsz,newsz)   cuda_realloc(p,oldsz,newsz)
-//#define STBI_FREE(p)                        cudaFreeHost(p)
-
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
@@ -96,6 +61,6 @@ Image::~Image(){
         #ifdef MEM_DEBUG
         printf("Image DELETE at %p\n", data);
         #endif
-        cudaFreeHost(data);
+        free(data);
     }
 }

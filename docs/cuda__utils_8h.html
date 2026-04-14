@@ -157,14 +157,14 @@ Macros</h2></td></tr>
 <tr class="memitem:acd2744c5d19cef35f8dd2ff5031db04c" id="r_acd2744c5d19cef35f8dd2ff5031db04c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cuda__utils_8h.html#acd2744c5d19cef35f8dd2ff5031db04c">CUDA_ERROR_CHECK</a>(result)</td></tr>
 <tr class="memdesc:acd2744c5d19cef35f8dd2ff5031db04c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks CUDA API call result and throws runtime error on failure.  <br /></td></tr>
 <tr class="separator:acd2744c5d19cef35f8dd2ff5031db04c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa82f894e6f42c193a0b7e16b9745ff8b" id="r_aa82f894e6f42c193a0b7e16b9745ff8b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cuda__utils_8h.html#aa82f894e6f42c193a0b7e16b9745ff8b">CUDA_KERNEL_ERROR_CHECK</a>(kernel)</td></tr>
+<tr class="memitem:aa82f894e6f42c193a0b7e16b9745ff8b" id="r_aa82f894e6f42c193a0b7e16b9745ff8b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cuda__utils_8h.html#aa82f894e6f42c193a0b7e16b9745ff8b">CUDA_KERNEL_ERROR_CHECK</a>(kernel)&#160;&#160;&#160;<a class="el" href="cuda__utils_8h.html#acd2744c5d19cef35f8dd2ff5031db04c">CUDA_ERROR_CHECK</a>(cudaGetLastError())</td></tr>
 <tr class="memdesc:aa82f894e6f42c193a0b7e16b9745ff8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Launches a kernel and checks for runtime launch errors.  <br /></td></tr>
 <tr class="separator:aa82f894e6f42c193a0b7e16b9745ff8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a20cc6d038493be954e67f9b8cea093ba" id="r_a20cc6d038493be954e67f9b8cea093ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cuda__utils_8h.html#a20cc6d038493be954e67f9b8cea093ba">printGPUProperties</a> ()</td></tr>
-<tr class="memdesc:a20cc6d038493be954e67f9b8cea093ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints information about available GPU devices.  <br /></td></tr>
+<tr class="memdesc:a20cc6d038493be954e67f9b8cea093ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints information about available GPU devices. Queries CUDA runtime for device properties and prints them to stdout.  <br /></td></tr>
 <tr class="separator:a20cc6d038493be954e67f9b8cea093ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -211,7 +211,6 @@ Functions</h2></td></tr>
 <div class="line">} <span class="keywordflow">while</span>(0)</div>
 </div><!-- fragment -->
 <p>Checks CUDA API call result and throws runtime error on failure. </p>
-<p>Usage: <a class="el" href="cuda__utils_8h.html#acd2744c5d19cef35f8dd2ff5031db04c" title="Checks CUDA API call result and throws runtime error on failure.">CUDA_ERROR_CHECK(cudaMalloc(&amp;ptr, size))</a>; </p>
 
 </div>
 </div>
@@ -240,18 +239,12 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">kernel</td><td>)</td>
-          <td></td>
+          <td>&#160;&#160;&#160;<a class="el" href="cuda__utils_8h.html#acd2744c5d19cef35f8dd2ff5031db04c">CUDA_ERROR_CHECK</a>(cudaGetLastError())</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> { \</div>
-<div class="line">    (kernel) \</div>
-<div class="line">    <a class="code hl_define" href="cuda__utils_8h.html#acd2744c5d19cef35f8dd2ff5031db04c">CUDA_ERROR_CHECK</a>(cudaGetLastError()); \</div>
-<div class="line">} <span class="keywordflow">while</span>(0)</div>
-<div class="ttc" id="acuda__utils_8h_html_acd2744c5d19cef35f8dd2ff5031db04c"><div class="ttname"><a href="cuda__utils_8h.html#acd2744c5d19cef35f8dd2ff5031db04c">CUDA_ERROR_CHECK</a></div><div class="ttdeci">#define CUDA_ERROR_CHECK(result)</div><div class="ttdoc">Checks CUDA API call result and throws runtime error on failure.</div><div class="ttdef"><b>Definition</b> cuda_utils.h:25</div></div>
-</div><!-- fragment -->
+
 <p>Launches a kernel and checks for runtime launch errors. </p>
-<p>Usage: <a class="el" href="cuda__utils_8h.html#aa82f894e6f42c193a0b7e16b9745ff8b" title="Launches a kernel and checks for runtime launch errors.">CUDA_KERNEL_ERROR_CHECK(myKernel&lt;&lt;&lt;grid, block&gt;&gt;&gt;(args))</a>; </p>
 
 </div>
 </div>
@@ -313,8 +306,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Prints information about available GPU devices. </p>
-<p>Queries CUDA runtime for device properties and prints them to stdout. </p>
+<p>Prints information about available GPU devices. Queries CUDA runtime for device properties and prints them to stdout. </p>
 
 </div>
 </div>

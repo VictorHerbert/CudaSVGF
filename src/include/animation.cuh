@@ -7,8 +7,6 @@
 #include "filter.cuh"
 #include <string>
 
-constexpr int MAX_STREAM = 32;
-
 /// @brief Applies a filter to a video using CPU processing.
 /// @param filepath Input video file path.
 /// @param shape Frame dimensions (width, height).

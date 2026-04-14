@@ -34,9 +34,6 @@ void BENCH(const std::string& label, F&& func, int it = 1) {
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
 
-    // Warm up
-    //func();
-
     cudaEventRecord(start);
 
     func();

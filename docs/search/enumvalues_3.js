@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['none_0',['NONE',['../filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785dac157bdf0b85a40d2619cbc8bc1ae5fe2',1,'filter.cuh']]]
+  ['tile_0',['TILE',['../filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94fafd8331de7faa8b5fa5c0a0370f1c9342',1,'filter.cuh']]]
 ];

@@ -14,10 +14,8 @@ var searchData=
   ['cuda_5ferror_5fcheck_11',['CUDA_ERROR_CHECK',['../cuda__utils_8h.html#acd2744c5d19cef35f8dd2ff5031db04c',1,'cuda_utils.h']]],
   ['cuda_5ffunc_12',['CUDA_FUNC',['../cuda__utils_8h.html#a80c9ee42937de0e8bfc1eb84e9a83701',1,'cuda_utils.h']]],
   ['cuda_5fkernel_5ferror_5fcheck_13',['CUDA_KERNEL_ERROR_CHECK',['../cuda__utils_8h.html#aa82f894e6f42c193a0b7e16b9745ff8b',1,'cuda_utils.h']]],
-  ['cuda_5fmalloc_14',['cuda_malloc',['../image_8cpp.html#abf2f13d2b8520eaab15d1e0594a1878a',1,'image.cpp']]],
-  ['cuda_5frealloc_15',['cuda_realloc',['../image_8cpp.html#a8c718d1265f9138e77340ed262a84c1b',1,'image.cpp']]],
-  ['cuda_5futils_2ecpp_16',['cuda_utils.cpp',['../cuda__utils_8cpp.html',1,'']]],
-  ['cuda_5futils_2eh_17',['cuda_utils.h',['../cuda__utils_8h.html',1,'']]],
-  ['cudagbuffer_18',['cudagbuffer',['../structCudaGBuffer.html#acb2ac29cd64a68ed67bb8044d8ae7991',1,'CudaGBuffer::CudaGBuffer()'],['../structCudaGBuffer.html',1,'CudaGBuffer&lt; T &gt;'],['../structCudaGBuffer.html#add0c8acf964d511edf5aba809442608a',1,'CudaGBuffer::CudaGBuffer()']]],
-  ['cudavector_19',['cudavector',['../structCudaVector.html',1,'CudaVector&lt; T &gt;'],['../structCudaVector.html#a6b90ac9c0a400bcb0362d7fdf33eb204',1,'CudaVector::CudaVector(size_t size)'],['../structCudaVector.html#a1a94374bbd5135a5ca9fb20fc7fab541',1,'CudaVector::CudaVector()']]]
+  ['cuda_5futils_2ecpp_14',['cuda_utils.cpp',['../cuda__utils_8cpp.html',1,'']]],
+  ['cuda_5futils_2eh_15',['cuda_utils.h',['../cuda__utils_8h.html',1,'']]],
+  ['cudagbuffer_16',['cudagbuffer',['../structCudaGBuffer.html',1,'CudaGBuffer&lt; T &gt;'],['../structCudaGBuffer.html#acb2ac29cd64a68ed67bb8044d8ae7991',1,'CudaGBuffer::CudaGBuffer(int2 shape)'],['../structCudaGBuffer.html#add0c8acf964d511edf5aba809442608a',1,'CudaGBuffer::CudaGBuffer()=default']]],
+  ['cudavector_17',['cudavector',['../structCudaVector.html#a6b90ac9c0a400bcb0362d7fdf33eb204',1,'CudaVector::CudaVector(size_t size)'],['../structCudaVector.html#a1a94374bbd5135a5ca9fb20fc7fab541',1,'CudaVector::CudaVector()'],['../structCudaVector.html',1,'CudaVector&lt; T &gt;']]]
 ];

@@ -9,7 +9,6 @@
 #include <iostream>
 #include <cuda_runtime.h>
 
-
 #define KERNEL __global__
 #define CUDA_FUNC __device__
 #define CUDA_CPU_FUNC __device__ __host__

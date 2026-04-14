@@ -29,7 +29,7 @@ void test() {
 //--------------------------------------------------------------------------------------------------------------
 
     CHECK("cpu_atrous", [&]{
-        SKIP();
+        //SKIP();
 
         CpuGBuffer<uchar3> cpuFrame(shape);
 
@@ -42,7 +42,7 @@ void test() {
 // --------------------------------------------------------------------------------------------------------------
 
     CHECK("cuda_atrous_u3", [&]{
-        SKIP();
+        //SKIP();
         CudaGBuffer<uchar3> frame(shape);
 
         for(dim3 blockSize : blockSizes){
@@ -57,9 +57,8 @@ void test() {
 
 // --------------------------------------------------------------------------------------------------------------
 
-
     CHECK("cuda_atrous_u4", [&]{
-        SKIP();
+        //SKIP();
 
         CudaGBuffer<uchar4> frame(shape);
 
@@ -76,7 +75,6 @@ void test() {
 
 // --------------------------------------------------------------------------------------------------------------
 
-
     CHECK("cuda_atrous_tile", [&]{
         //SKIP();
 
@@ -88,8 +86,6 @@ void test() {
             int2 tileShape = {blockShape.x + 2*ATROUS_RADIUS*(1<<depth), blockShape.y + 2*ATROUS_RADIUS*(1<<depth)};
             int tileSize = totalSize(tileShape);
             int tileBytes = tileSize*sizeof(uchar4);
-
-            printf("%d KB\n", tileBytes/1024);
 
             assert(tileBytes < 48*1024);
 
@@ -103,7 +99,6 @@ void test() {
 
 // --------------------------------------------------------------------------------------------------------------
 
-
     CHECK("cuda_atrous_aligned", [&]{
         //SKIP();
 
@@ -115,8 +110,6 @@ void test() {
             int2 tileShape = {blockShape.x + 2*ATROUS_RADIUS*(1<<depth), blockShape.y + 2*ATROUS_RADIUS*(1<<depth)};
             int tileSize = totalSize(tileShape);
             int tileBytes = tileSize*sizeof(uchar4);
-
-            printf("%d KB\n", tileBytes/1024);
 
             assert(tileBytes < 48*1024);
 
@@ -131,7 +124,7 @@ void test() {
 // --------------------------------------------------------------------------------------------------------------
 
     CHECK("image_io", [&]{
-        SKIP();
+        //SKIP();
         BENCH("image_read_512", [&]{volatile Image img("render/cornell/Render0001.png");});
         Image img_512("render/cornell/Render0001.png");
         BENCH("image_save_512", [&]{img_512.save("build/img_save512.png");});
@@ -141,11 +134,16 @@ void test() {
         BENCH("image_save_hd", [&]{img_hd.save("build/img_save_hd.png");});
     });
 
-    CHECK("video_cuda", [&]{
-        SKIP();
-        BENCH("video_cuda_1", [&]{animationFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 1);});
-        BENCH("video_cuda_4", [&]{animationFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 4);});
-        BENCH("video_cuda_8", [&]{animationFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 8);});
+// --------------------------------------------------------------------------------------------------------------
+
+    CHECK("animation_cuda", [&]{
+        //SKIP();
+        BENCH("animation_cuda_512_1", [&]{animationFilterCuda("render/cornell/", {512, 512}, 14, 5, FilterParams(), 1);});
+        BENCH("animation_cuda_512_4", [&]{animationFilterCuda("render/cornell/", {512, 512}, 14, 5, FilterParams(), 4);});
+        BENCH("animation_cuda_512_8", [&]{animationFilterCuda("render/cornell/", {512, 512}, 14, 5, FilterParams(), 8);});
+        BENCH("animation_cuda_hd_1", [&]{animationFilterCuda("render/sponza/", {1920, 1080}, 14, 5, FilterParams(), 1);});
+        BENCH("animation_cuda_hd_4", [&]{animationFilterCuda("render/sponza/", {1920, 1080}, 14, 5, FilterParams(), 4);});
+        BENCH("animation_cuda_hd_8", [&]{animationFilterCuda("render/sponza/", {1920, 1080}, 14, 5, FilterParams(), 8);});
     });
 
 }

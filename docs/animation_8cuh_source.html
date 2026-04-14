@@ -88,30 +88,27 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="filter_8cuh.html">filter.cuh</a>&quot;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="animation_8cuh.html#ad4107a44a4f58ed3b7e109023ea9feb9">   10</a></span><span class="keyword">constexpr</span> <span class="keywordtype">int</span> <a class="code hl_variable" href="animation_8cuh.html#ad4107a44a4f58ed3b7e109023ea9feb9">MAX_STREAM</a> = 32;</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="animation_8cuh.html#a284ea6ba958bf373eb97452ccad29fcc">   18</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="animation_8cuh.html#a284ea6ba958bf373eb97452ccad29fcc">animationFilterCpu</a>(</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    std::string filepath,</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    int2 shape,</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keywordtype">int</span> frameCount,</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">int</span> depth,</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_struct" href="structFilterParams.html">FilterParams</a> params = <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>()</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keywordtype">void</span> <a class="code hl_function" href="animation_8cuh.html#a99b80e595c5f2d95a6483d5aeb57e00f">animationFilterCuda</a>(</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    std::string filepath,</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    int2 shape,</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">int</span> frameCount,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">int</span> depth,</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <a class="code hl_struct" href="structFilterParams.html">FilterParams</a> params = <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>(),</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">int</span> maxStreamCount = 4</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="animation_8cuh.html#a284ea6ba958bf373eb97452ccad29fcc">   16</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="animation_8cuh.html#a284ea6ba958bf373eb97452ccad29fcc">animationFilterCpu</a>(</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    std::string filepath,</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    int2 shape,</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordtype">int</span> frameCount,</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">int</span> depth,</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <a class="code hl_struct" href="structFilterParams.html">FilterParams</a> params = <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>()</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keywordtype">void</span> <a class="code hl_function" href="animation_8cuh.html#a99b80e595c5f2d95a6483d5aeb57e00f">animationFilterCuda</a>(</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    std::string filepath,</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    int2 shape,</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">int</span> frameCount,</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordtype">int</span> depth,</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <a class="code hl_struct" href="structFilterParams.html">FilterParams</a> params = <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>(),</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">int</span> maxStreamCount = 4</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aanimation_8cuh_html_a284ea6ba958bf373eb97452ccad29fcc"><div class="ttname"><a href="animation_8cuh.html#a284ea6ba958bf373eb97452ccad29fcc">animationFilterCpu</a></div><div class="ttdeci">void animationFilterCpu(std::string filepath, int2 shape, int frameCount, int depth, FilterParams params=FilterParams())</div><div class="ttdoc">Applies a filter to a video using CPU processing.</div></div>
 <div class="ttc" id="aanimation_8cuh_html_a99b80e595c5f2d95a6483d5aeb57e00f"><div class="ttname"><a href="animation_8cuh.html#a99b80e595c5f2d95a6483d5aeb57e00f">animationFilterCuda</a></div><div class="ttdeci">void animationFilterCuda(std::string filepath, int2 shape, int frameCount, int depth, FilterParams params=FilterParams(), int maxStreamCount=4)</div><div class="ttdoc">Applies a filter to a video using CUDA acceleration.</div><div class="ttdef"><b>Definition</b> animation.cu:54</div></div>
-<div class="ttc" id="aanimation_8cuh_html_ad4107a44a4f58ed3b7e109023ea9feb9"><div class="ttname"><a href="animation_8cuh.html#ad4107a44a4f58ed3b7e109023ea9feb9">MAX_STREAM</a></div><div class="ttdeci">constexpr int MAX_STREAM</div><div class="ttdef"><b>Definition</b> animation.cuh:10</div></div>
 <div class="ttc" id="afilter_8cuh_html"><div class="ttname"><a href="filter_8cuh.html">filter.cuh</a></div><div class="ttdoc">Definition of Atrous Filters.</div></div>
 <div class="ttc" id="astructFilterParams_html"><div class="ttname"><a href="structFilterParams.html">FilterParams</a></div><div class="ttdoc">Parameters controlling the cross channel filtering behavior.</div><div class="ttdef"><b>Definition</b> filter.cuh:15</div></div>
 </div><!-- fragment --></div><!-- contents -->

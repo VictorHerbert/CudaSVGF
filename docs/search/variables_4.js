@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['normal_0',['normal',['../structGBuffer.html#a5f0f89d425a0f12e0698abef4961e962',1,'GBuffer']]],
-  ['normalvec_1',['normalvec',['../structCpuGBuffer.html#a4ce8c665f93dec4673328ba1b57cd55d',1,'CpuGBuffer::normalVec'],['../structCudaGBuffer.html#aa9248ef3225297c80494c7090c3ce2fa',1,'CudaGBuffer::normalVec']]]
+  ['render_0',['render',['../structGBuffer.html#a009bfd6d3808d7fc4bcf996dc5e6fca7',1,'GBuffer']]],
+  ['rendervec_1',['rendervec',['../structCpuGBuffer.html#a23bed630a20cb8b2e8897a6a6245bf9d',1,'CpuGBuffer::renderVec'],['../structCudaGBuffer.html#ae70b50eb0c1906f5e5709c1c25e43584',1,'CudaGBuffer::renderVec']]]
 ];

@@ -99,7 +99,6 @@ void animationFilterCuda(
         if(i >= streamCount){
             cudaEventSynchronize(event);
 
-
             Image::save(
                 filepath + "Denoised" + paddedNumber(i+1-streamCount, 4) + ".png",
                 (byte*) denoised[streamIdx].data(),

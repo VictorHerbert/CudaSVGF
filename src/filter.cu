@@ -48,14 +48,12 @@ void atrousFilter(GBuffer<T> frame, int depth, FilterParams params, cudaStream_t
             int tileSize = totalSize(tileShape);
             int tileBytes = tileSize*sizeof(T);
             if constexpr(type == BASE)
-                tileSize = 0;
-
-            printf("%d KB\n", tileBytes/1024);
+                tileBytes = 0;
 
             assert(tileBytes < 48*1024);
 
             atrousFilterCudaPass<type><<<gridShape, blockShape, tileBytes, stream>>>(curr, next, i, frame, params);
-            CUDA_KERNEL_ERROR_CHECK();
+            //CUDA_KERNEL_ERROR_CHECK();
         }
         else if constexpr (engine == CPU)
             atrousFilterCpuPass<type>(curr, next,i, frame, params);
@@ -104,13 +102,14 @@ void atrousFilterPixel(int2 pos, const T* in, T* out, T* tile, int level, GBuffe
 
             if(pos.x >= frame.shape.x || pos.y >= frame.shape.y)
                 return;
-            var = variance(pos, in, frame.shape, level);
+            
+                var = variance(pos-tileStart, tile, tileShape, level);
         }
-        else{
+        else {
             if(pos.x >= frame.shape.x || pos.y >= frame.shape.y)
                 return;
 
-            var = variance(pos-tileStart, tile, tileShape, level);
+            var = variance(pos, in, frame.shape, level);
         }
 
 #else

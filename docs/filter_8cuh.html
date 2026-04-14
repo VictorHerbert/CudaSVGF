@@ -177,27 +177,26 @@ Macros</h2></td></tr>
 <tr class="memitem:ac42c901b241f3189fb2451bfea993e1a" id="r_ac42c901b241f3189fb2451bfea993e1a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#ac42c901b241f3189fb2451bfea993e1a">DEFAULT_BLOCK_SIZE</a>&#160;&#160;&#160;dim3(32,4);</td></tr>
 <tr class="memdesc:ac42c901b241f3189fb2451bfea993e1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default CUDA thread block size.  <br /></td></tr>
 <tr class="separator:ac42c901b241f3189fb2451bfea993e1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6594042931ca0bb0c62789b0675599f9" id="r_a6594042931ca0bb0c62789b0675599f9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a6594042931ca0bb0c62789b0675599f9">INSTANTIATE_ATROUS_CPU_CFG</a>(type,  tile,  T)</td></tr>
-<tr class="separator:a6594042931ca0bb0c62789b0675599f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a349652eca18df11775933e8b5824f82a" id="r_a349652eca18df11775933e8b5824f82a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a349652eca18df11775933e8b5824f82a">INSTANTIATE_ATROUS_CUDA_CFG</a>(type,  tile,  T)</td></tr>
-<tr class="separator:a349652eca18df11775933e8b5824f82a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62ce2df452fe16b46978a027435234ca" id="r_a62ce2df452fe16b46978a027435234ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a62ce2df452fe16b46978a027435234ca">INSTANTIATE_ATROUS_CPU_CFG</a>(T)</td></tr>
+<tr class="memdesc:a62ce2df452fe16b46978a027435234ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiates CPU configuration for a specific type.  <br /></td></tr>
+<tr class="separator:a62ce2df452fe16b46978a027435234ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af262b88b06ecb7ad1531688880bab46b" id="r_af262b88b06ecb7ad1531688880bab46b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#af262b88b06ecb7ad1531688880bab46b">INSTANTIATE_ATROUS_CUDA_CFG</a>(type,  T)</td></tr>
+<tr class="memdesc:af262b88b06ecb7ad1531688880bab46b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiates CUDA configuration for a given filter type and pixel type.  <br /></td></tr>
+<tr class="separator:af262b88b06ecb7ad1531688880bab46b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:afb77ec50b20ef0d956ee5b89266903e1" id="r_afb77ec50b20ef0d956ee5b89266903e1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a> { <a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1a0035eb0600d18dfc302f6bf7a7cbfa3b">CPU</a>
 , <a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1a2cd2020b2d427714dccafebc148027ba">CUDA</a>
  }</td></tr>
+<tr class="memdesc:afb77ec50b20ef0d956ee5b89266903e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execution backend for the filter pipeline.  <a href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">More...</a><br /></td></tr>
 <tr class="separator:afb77ec50b20ef0d956ee5b89266903e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ef0ab496f57e183b484e62e2053c94f" id="r_a7ef0ab496f57e183b484e62e2053c94f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> { <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94faa7d623548e49a1514076f5bee3b314a4">BASE</a>
-, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94fa6e77b5c6a00f59932061e07450958025">APROX</a>
 , <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94fafd8331de7faa8b5fa5c0a0370f1c9342">TILE</a>
+, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94fa897742ebff19b8080b04bdb2c4423e07">ALIGNED</a>
  }</td></tr>
+<tr class="memdesc:a7ef0ab496f57e183b484e62e2053c94f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memory/layout strategy used in filtering.  <a href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">More...</a><br /></td></tr>
 <tr class="separator:a7ef0ab496f57e183b484e62e2053c94f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa27f8fb35f3de4f2010d1777408b785d" id="r_aa27f8fb35f3de4f2010d1777408b785d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a> { <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785dac157bdf0b85a40d2619cbc8bc1ae5fe2">NONE</a>
-, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785da8f626cb9c789e0dd4b7c9dad49465938">PACKED</a>
-, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785da897742ebff19b8080b04bdb2c4423e07">ALIGNED</a>
- }</td></tr>
-<tr class="separator:aa27f8fb35f3de4f2010d1777408b785d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -209,23 +208,34 @@ Functions</h2></td></tr>
 <tr class="separator:a3ccd963450fa7fdfa976869600c1718a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a201adaa482ed3470caf7220d8f340722" id="r_a201adaa482ed3470caf7220d8f340722"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a201adaa482ed3470caf7220d8f340722"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a201adaa482ed3470caf7220d8f340722">getLevelBuffer</a> (int level, int depth, <a class="el" href="structGBuffer.html">GBuffer</a>&lt; T &gt; frame)</td></tr>
+<tr class="memdesc:a201adaa482ed3470caf7220d8f340722"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects the appropriate buffer for a given pyramid level.  <br /></td></tr>
 <tr class="separator:a201adaa482ed3470caf7220d8f340722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7be62dbffdfa6eadced2b1b1067322b6" id="r_a7be62dbffdfa6eadced2b1b1067322b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a80c9ee42937de0e8bfc1eb84e9a83701">CUDA_FUNC</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a7be62dbffdfa6eadced2b1b1067322b6">saveTile</a> (uchar4 *tile, int2 tileShape, const uchar4 *img, int2 imgShape, int2 tileStartPos)</td></tr>
+<tr class="memdesc:a7be62dbffdfa6eadced2b1b1067322b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a rectangular tile from an image into a tile buffer.  <br /></td></tr>
+<tr class="separator:a7be62dbffdfa6eadced2b1b1067322b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b57a3d0daaa68e72ad60323bcc22c25" id="r_a4b57a3d0daaa68e72ad60323bcc22c25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a80c9ee42937de0e8bfc1eb84e9a83701">CUDA_FUNC</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a4b57a3d0daaa68e72ad60323bcc22c25">saveTileAligned</a> (uchar4 *tile, int2 tileShape, const uchar4 *img, int2 imgShape, int2 tileStartPos)</td></tr>
+<tr class="memdesc:a4b57a3d0daaa68e72ad60323bcc22c25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a rectangular tile using alignment-optimized memory access.  <br /></td></tr>
+<tr class="separator:a4b57a3d0daaa68e72ad60323bcc22c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20994b2e1749ae71dbb4ad591ff59738" id="r_a20994b2e1749ae71dbb4ad591ff59738"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a20994b2e1749ae71dbb4ad591ff59738"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> float&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a20994b2e1749ae71dbb4ad591ff59738">variance</a> (int2 pos, const T *in, int2 shape, int level)</td></tr>
 <tr class="memdesc:a20994b2e1749ae71dbb4ad591ff59738"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimates local luminance variance using an à trous sampling pattern.  <br /></td></tr>
 <tr class="separator:a20994b2e1749ae71dbb4ad591ff59738"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a690662de368eb4dd9cf2c905c8e49116" id="r_a690662de368eb4dd9cf2c905c8e49116"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a> engine, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a> tile, typename T &gt; </td></tr>
-<tr class="memitem:a690662de368eb4dd9cf2c905c8e49116"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">atrousFilter</a> (<a class="el" href="structGBuffer.html">GBuffer</a>&lt; T &gt; frame, int depth, <a class="el" href="structFilterParams.html">FilterParams</a> params=<a class="el" href="structFilterParams.html">FilterParams</a>(), cudaStream_t stream=0)</td></tr>
-<tr class="separator:a690662de368eb4dd9cf2c905c8e49116"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2d9628713171ee03675c6ef5314d94e" id="r_aa2d9628713171ee03675c6ef5314d94e"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a> tile, typename T &gt; </td></tr>
-<tr class="memitem:aa2d9628713171ee03675c6ef5314d94e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#aa2d9628713171ee03675c6ef5314d94e">atrousFilterCpuPass</a> (const T *in, T *out, int level, <a class="el" href="structGBuffer.html">GBuffer</a>&lt; T &gt; frame, <a class="el" href="structFilterParams.html">FilterParams</a> paramsparams=<a class="el" href="structFilterParams.html">FilterParams</a>())</td></tr>
-<tr class="separator:aa2d9628713171ee03675c6ef5314d94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a080d2f4674e9ff845d6377083e514bc1" id="r_a080d2f4674e9ff845d6377083e514bc1"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a> tile, typename T &gt; </td></tr>
-<tr class="memitem:a080d2f4674e9ff845d6377083e514bc1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="cuda__utils_8h.html#ac4e52c1bd876037cd22e859f38fd5d27">KERNEL</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a080d2f4674e9ff845d6377083e514bc1">atrousFilterCudaPass</a> (const T *in, T *out, int level, <a class="el" href="structGBuffer.html">GBuffer</a>&lt; T &gt; frame, <a class="el" href="structFilterParams.html">FilterParams</a> paramsparams=<a class="el" href="structFilterParams.html">FilterParams</a>())</td></tr>
-<tr class="separator:a080d2f4674e9ff845d6377083e514bc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f885b5ccf7ca2524670f396de814ab9" id="r_a1f885b5ccf7ca2524670f396de814ab9"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a> engine, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a> tile, typename T &gt; </td></tr>
-<tr class="memitem:a1f885b5ccf7ca2524670f396de814ab9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a1f885b5ccf7ca2524670f396de814ab9">atrousFilterPixel</a> (int2 pos, const T *in, T *out, const T *cache, int level, <a class="el" href="structGBuffer.html">GBuffer</a>&lt; T &gt; frame, <a class="el" href="structFilterParams.html">FilterParams</a> paramsparams=<a class="el" href="structFilterParams.html">FilterParams</a>())</td></tr>
-<tr class="separator:a1f885b5ccf7ca2524670f396de814ab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf8617920f785ed2be4fa08e67517921" id="r_abf8617920f785ed2be4fa08e67517921"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a> engine, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, typename T &gt; </td></tr>
+<tr class="memitem:abf8617920f785ed2be4fa08e67517921"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">atrousFilter</a> (<a class="el" href="structGBuffer.html">GBuffer</a>&lt; T &gt; frame, int depth, <a class="el" href="structFilterParams.html">FilterParams</a> params=<a class="el" href="structFilterParams.html">FilterParams</a>(), cudaStream_t stream=0)</td></tr>
+<tr class="memdesc:abf8617920f785ed2be4fa08e67517921"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes full à trous filtering pipeline.  <br /></td></tr>
+<tr class="separator:abf8617920f785ed2be4fa08e67517921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a998acaf33ee0c9bae6a298398fc58ae6" id="r_a998acaf33ee0c9bae6a298398fc58ae6"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, typename T &gt; </td></tr>
+<tr class="memitem:a998acaf33ee0c9bae6a298398fc58ae6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a998acaf33ee0c9bae6a298398fc58ae6">atrousFilterCpuPass</a> (const T *in, T *out, int level, <a class="el" href="structGBuffer.html">GBuffer</a>&lt; T &gt; frame, <a class="el" href="structFilterParams.html">FilterParams</a> params=<a class="el" href="structFilterParams.html">FilterParams</a>())</td></tr>
+<tr class="memdesc:a998acaf33ee0c9bae6a298398fc58ae6"><td class="mdescLeft">&#160;</td><td class="mdescRight">CPU implementation of a single à trous filter pass.  <br /></td></tr>
+<tr class="separator:a998acaf33ee0c9bae6a298398fc58ae6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f11dae53298d8d2d91b14a3fb686054" id="r_a9f11dae53298d8d2d91b14a3fb686054"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, typename T &gt; </td></tr>
+<tr class="memitem:a9f11dae53298d8d2d91b14a3fb686054"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="cuda__utils_8h.html#ac4e52c1bd876037cd22e859f38fd5d27">KERNEL</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#a9f11dae53298d8d2d91b14a3fb686054">atrousFilterCudaPass</a> (const T *in, T *out, int level, <a class="el" href="structGBuffer.html">GBuffer</a>&lt; T &gt; frame, <a class="el" href="structFilterParams.html">FilterParams</a> params=<a class="el" href="structFilterParams.html">FilterParams</a>())</td></tr>
+<tr class="memdesc:a9f11dae53298d8d2d91b14a3fb686054"><td class="mdescLeft">&#160;</td><td class="mdescRight">CUDA kernel for a single à trous filter pass.  <br /></td></tr>
+<tr class="separator:a9f11dae53298d8d2d91b14a3fb686054"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac963612881f35ab82311f65c59d73fc5" id="r_ac963612881f35ab82311f65c59d73fc5"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a> engine, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, typename T &gt; </td></tr>
+<tr class="memitem:ac963612881f35ab82311f65c59d73fc5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="filter_8cuh.html#ac963612881f35ab82311f65c59d73fc5">atrousFilterPixel</a> (int2 pos, const T *in, T *out, T *tile, int level, <a class="el" href="structGBuffer.html">GBuffer</a>&lt; T &gt; frame, <a class="el" href="structFilterParams.html">FilterParams</a> params=<a class="el" href="structFilterParams.html">FilterParams</a>())</td></tr>
+<tr class="memdesc:ac963612881f35ab82311f65c59d73fc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes filtered pixel value for à trous pipeline.  <br /></td></tr>
+<tr class="separator:ac963612881f35ab82311f65c59d73fc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Definition of Atrous Filters. </p>
@@ -308,8 +318,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6594042931ca0bb0c62789b0675599f9" name="a6594042931ca0bb0c62789b0675599f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6594042931ca0bb0c62789b0675599f9">&#9670;&#160;</a></span>INSTANTIATE_ATROUS_CPU_CFG</h2>
+<a id="a62ce2df452fe16b46978a027435234ca" name="a62ce2df452fe16b46978a027435234ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62ce2df452fe16b46978a027435234ca">&#9670;&#160;</a></span>INSTANTIATE_ATROUS_CPU_CFG</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -318,59 +328,39 @@ Functions</h2></td></tr>
           <td class="memname">#define INSTANTIATE_ATROUS_CPU_CFG</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">type, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname">T</td><td>)</td>
           <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">tile, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">T&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">atrousFilter&lt;CPU, type, tile, T&gt;</a>(<a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>, <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">cudaStream_t</a>); \</div>
-<div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">atrousFilterCpuPass&lt;type, tile, T&gt;</a>(<span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>*, <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>*, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>); \</div>
-<div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">atrousFilterPixel&lt;CPU, type, tile, T&gt;</a>(<a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">int2</a>, <span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>*, <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>*, <span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>*, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>);</div>
-<div class="ttc" id="afilter_8cuh_html_a690662de368eb4dd9cf2c905c8e49116"><div class="ttname"><a href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">atrousFilter</a></div><div class="ttdeci">void atrousFilter(GBuffer&lt; T &gt; frame, int depth, FilterParams params=FilterParams(), cudaStream_t stream=0)</div><div class="ttdef"><b>Definition</b> filter.cu:37</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">atrousFilter&lt;CPU, BASE, T&gt;</a>(<a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>, <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">cudaStream_t</a>); \</div>
+<div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">atrousFilterCpuPass&lt;BASE,  T&gt;</a>(<span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>); \</div>
+<div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">atrousFilterPixel&lt;CPU, BASE, T&gt;</a>(<a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">int2</a>, <span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>);</div>
+<div class="ttc" id="afilter_8cuh_html_abf8617920f785ed2be4fa08e67517921"><div class="ttname"><a href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">atrousFilter</a></div><div class="ttdeci">void atrousFilter(GBuffer&lt; T &gt; frame, int depth, FilterParams params=FilterParams(), cudaStream_t stream=0)</div><div class="ttdoc">Executes full à trous filtering pipeline.</div><div class="ttdef"><b>Definition</b> filter.cu:38</div></div>
 <div class="ttc" id="astructFilterParams_html"><div class="ttname"><a href="structFilterParams.html">FilterParams</a></div><div class="ttdoc">Parameters controlling the cross channel filtering behavior.</div><div class="ttdef"><b>Definition</b> filter.cuh:15</div></div>
 <div class="ttc" id="astructGBuffer_html"><div class="ttname"><a href="structGBuffer.html">GBuffer</a></div><div class="ttdoc">Generic G-buffer storing multiple render targets.</div><div class="ttdef"><b>Definition</b> gbuffer.h:16</div></div>
 </div><!-- fragment -->
+<p>Instantiates CPU configuration for a specific type. </p>
+
 </div>
 </div>
-<a id="a349652eca18df11775933e8b5824f82a" name="a349652eca18df11775933e8b5824f82a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a349652eca18df11775933e8b5824f82a">&#9670;&#160;</a></span>INSTANTIATE_ATROUS_CUDA_CFG</h2>
+<a id="af262b88b06ecb7ad1531688880bab46b" name="af262b88b06ecb7ad1531688880bab46b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af262b88b06ecb7ad1531688880bab46b">&#9670;&#160;</a></span>INSTANTIATE_ATROUS_CUDA_CFG</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#<a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">define</a> INSTANTIATE_ATROUS_CUDA_CFG</td>
+          <td class="memname">#<a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">define</a> INSTANTIATE_ATROUS_CUDA_CFG</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">type</a>, </td>
+          <td class="paramname"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">type</a>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">tile</a>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a>&#160;</td>
+          <td class="paramname"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -379,11 +369,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">atrousFilter&lt;CUDA, type, tile, T&gt;</a>(<a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>, <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">cudaStream_t</a>); \</div>
-<div class="line"><span class="keyword">template</span> <a class="code hl_define" href="cuda__utils_8h.html#ac4e52c1bd876037cd22e859f38fd5d27">KERNEL</a> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">atrousFilterCudaPass&lt;type, tile, T&gt;</a>(<span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>*, <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>*, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>); \</div>
-<div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">atrousFilterPixel&lt;CUDA, type, tile, T&gt;</a>(<a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">int2</a>, <span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>*, <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>*, <span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#a690662de368eb4dd9cf2c905c8e49116">T</a>* <span class="keywordtype">int</span>, <a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>);</div>
-<div class="ttc" id="acuda__utils_8h_html_ac4e52c1bd876037cd22e859f38fd5d27"><div class="ttname"><a href="cuda__utils_8h.html#ac4e52c1bd876037cd22e859f38fd5d27">KERNEL</a></div><div class="ttdeci">#define KERNEL</div><div class="ttdef"><b>Definition</b> cuda_utils.h:13</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">atrousFilter&lt;CUDA, type, T&gt;</a>(<a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>, <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">cudaStream_t</a>); \</div>
+<div class="line"><span class="keyword">template</span> <a class="code hl_define" href="cuda__utils_8h.html#ac4e52c1bd876037cd22e859f38fd5d27">KERNEL</a> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">atrousFilterCudaPass&lt;type, T&gt;</a>(<span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>); \</div>
+<div class="line"><span class="keyword">template</span> <span class="keywordtype">void</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">atrousFilterPixel&lt;CUDA, type, T&gt;</a>(<a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">int2</a>, <span class="keyword">const</span> <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <a class="code hl_function" href="filter_8cuh.html#abf8617920f785ed2be4fa08e67517921">T</a>*, <span class="keywordtype">int</span>, <a class="code hl_struct" href="structGBuffer.html">GBuffer&lt;T&gt;</a>, <a class="code hl_struct" href="structFilterParams.html">FilterParams</a>);</div>
+<div class="ttc" id="acuda__utils_8h_html_ac4e52c1bd876037cd22e859f38fd5d27"><div class="ttname"><a href="cuda__utils_8h.html#ac4e52c1bd876037cd22e859f38fd5d27">KERNEL</a></div><div class="ttdeci">#define KERNEL</div><div class="ttdef"><b>Definition</b> cuda_utils.h:12</div></div>
 </div><!-- fragment -->
+<p>Instantiates CUDA configuration for a given filter type and pixel type. </p>
+
 </div>
 </div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
@@ -394,32 +386,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">enum</a> <a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a></td>
+          <td class="memname"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">enum</a> <a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Execution backend for the filter pipeline. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="afb77ec50b20ef0d956ee5b89266903e1a0035eb0600d18dfc302f6bf7a7cbfa3b" name="afb77ec50b20ef0d956ee5b89266903e1a0035eb0600d18dfc302f6bf7a7cbfa3b"></a>CPU&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="afb77ec50b20ef0d956ee5b89266903e1a2cd2020b2d427714dccafebc148027ba" name="afb77ec50b20ef0d956ee5b89266903e1a2cd2020b2d427714dccafebc148027ba"></a>CUDA&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-</div>
-</div>
-<a id="aa27f8fb35f3de4f2010d1777408b785d" name="aa27f8fb35f3de4f2010d1777408b785d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa27f8fb35f3de4f2010d1777408b785d">&#9670;&#160;</a></span>FilterTile</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">enum</a> <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa27f8fb35f3de4f2010d1777408b785dac157bdf0b85a40d2619cbc8bc1ae5fe2" name="aa27f8fb35f3de4f2010d1777408b785dac157bdf0b85a40d2619cbc8bc1ae5fe2"></a>NONE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="aa27f8fb35f3de4f2010d1777408b785da8f626cb9c789e0dd4b7c9dad49465938" name="aa27f8fb35f3de4f2010d1777408b785da8f626cb9c789e0dd4b7c9dad49465938"></a>PACKED&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="aa27f8fb35f3de4f2010d1777408b785da897742ebff19b8080b04bdb2c4423e07" name="aa27f8fb35f3de4f2010d1777408b785da897742ebff19b8080b04bdb2c4423e07"></a>ALIGNED&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -431,26 +406,28 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">enum</a> <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a></td>
+          <td class="memname"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">enum</a> <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Memory/layout strategy used in filtering. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7ef0ab496f57e183b484e62e2053c94faa7d623548e49a1514076f5bee3b314a4" name="a7ef0ab496f57e183b484e62e2053c94faa7d623548e49a1514076f5bee3b314a4"></a>BASE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a7ef0ab496f57e183b484e62e2053c94fa6e77b5c6a00f59932061e07450958025" name="a7ef0ab496f57e183b484e62e2053c94fa6e77b5c6a00f59932061e07450958025"></a>APROX&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7ef0ab496f57e183b484e62e2053c94fafd8331de7faa8b5fa5c0a0370f1c9342" name="a7ef0ab496f57e183b484e62e2053c94fafd8331de7faa8b5fa5c0a0370f1c9342"></a>TILE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7ef0ab496f57e183b484e62e2053c94fa897742ebff19b8080b04bdb2c4423e07" name="a7ef0ab496f57e183b484e62e2053c94fa897742ebff19b8080b04bdb2c4423e07"></a>ALIGNED&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a690662de368eb4dd9cf2c905c8e49116" name="a690662de368eb4dd9cf2c905c8e49116"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a690662de368eb4dd9cf2c905c8e49116">&#9670;&#160;</a></span>atrousFilter()</h2>
+<a id="abf8617920f785ed2be4fa08e67517921" name="abf8617920f785ed2be4fa08e67517921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf8617920f785ed2be4fa08e67517921">&#9670;&#160;</a></span>atrousFilter()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a> engine, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a> tile, typename T &gt; </div>
+template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a> engine, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, typename T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void atrousFilter </td>
@@ -484,45 +461,65 @@ template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903
       </table>
 </div><div class="memdoc">
 
+<p>Executes full à trous filtering pipeline. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">engine</td><td>CPU or CUDA backend. </td></tr>
+    <tr><td class="paramname">type</td><td>Memory/layout strategy. </td></tr>
+    <tr><td class="paramname">T</td><td>Pixel type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">frame</td><td><a class="el" href="structGBuffer.html" title="Generic G-buffer storing multiple render targets.">GBuffer</a> containing all working buffers. </td></tr>
+    <tr><td class="paramname">depth</td><td>Number of pyramid levels. </td></tr>
+    <tr><td class="paramname">params</td><td>Filter configuration parameters. </td></tr>
+    <tr><td class="paramname">stream</td><td>CUDA stream (only used in CUDA backend). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>None. </dd></dl>
+
 </div>
 </div>
-<a id="aa2d9628713171ee03675c6ef5314d94e" name="aa2d9628713171ee03675c6ef5314d94e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2d9628713171ee03675c6ef5314d94e">&#9670;&#160;</a></span>atrousFilterCpuPass()</h2>
+<a id="a998acaf33ee0c9bae6a298398fc58ae6" name="a998acaf33ee0c9bae6a298398fc58ae6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a998acaf33ee0c9bae6a298398fc58ae6">&#9670;&#160;</a></span>atrousFilterCpuPass()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a> tile, <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">typename</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> &gt; </div>
+template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">typename</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">void</a> atrousFilterCpuPass </td>
+          <td class="memname"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">void</a> atrousFilterCpuPass </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">const</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">const</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> *&#160;</td>
           <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structGBuffer.html">GBuffer</a>&lt; <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="structGBuffer.html">GBuffer</a>&lt; <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> &gt;&#160;</td>
           <td class="paramname"><em>frame</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structFilterParams.html">FilterParams</a>&#160;</td>
-          <td class="paramname"><em>paramsparams</em> = <code><a class="el" href="structFilterParams.html">FilterParams</a>()</code>&#160;</td>
+          <td class="paramname"><em>params</em> = <code><a class="el" href="structFilterParams.html">FilterParams</a>()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -532,45 +529,66 @@ template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c9
       </table>
 </div><div class="memdoc">
 
+<p>CPU implementation of a single à trous filter pass. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">type</td><td>Memory/layout strategy. </td></tr>
+    <tr><td class="paramname">T</td><td>Pixel type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>Input buffer. </td></tr>
+    <tr><td class="paramname">out</td><td>Output buffer. </td></tr>
+    <tr><td class="paramname">level</td><td>Current pyramid level. </td></tr>
+    <tr><td class="paramname">frame</td><td><a class="el" href="structGBuffer.html" title="Generic G-buffer storing multiple render targets.">GBuffer</a> with auxiliary buffers. </td></tr>
+    <tr><td class="paramname">params</td><td>Filter configuration parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>None.</dd></dl>
+<p>Executes one filtering iteration on CPU. </p>
+
 </div>
 </div>
-<a id="a080d2f4674e9ff845d6377083e514bc1" name="a080d2f4674e9ff845d6377083e514bc1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a080d2f4674e9ff845d6377083e514bc1">&#9670;&#160;</a></span>atrousFilterCudaPass()</h2>
+<a id="a9f11dae53298d8d2d91b14a3fb686054" name="a9f11dae53298d8d2d91b14a3fb686054"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f11dae53298d8d2d91b14a3fb686054">&#9670;&#160;</a></span>atrousFilterCudaPass()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a> tile, <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">typename</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> &gt; </div>
+template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">typename</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cuda__utils_8h.html#ac4e52c1bd876037cd22e859f38fd5d27">KERNEL</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">void</a> atrousFilterCudaPass </td>
+          <td class="memname"><a class="el" href="cuda__utils_8h.html#ac4e52c1bd876037cd22e859f38fd5d27">KERNEL</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">void</a> atrousFilterCudaPass </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">const</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">const</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> *&#160;</td>
           <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structGBuffer.html">GBuffer</a>&lt; <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="structGBuffer.html">GBuffer</a>&lt; <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> &gt;&#160;</td>
           <td class="paramname"><em>frame</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structFilterParams.html">FilterParams</a>&#160;</td>
-          <td class="paramname"><em>paramsparams</em> = <code><a class="el" href="structFilterParams.html">FilterParams</a>()</code>&#160;</td>
+          <td class="paramname"><em>params</em> = <code><a class="el" href="structFilterParams.html">FilterParams</a>()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -580,57 +598,77 @@ template&lt;<a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c9
       </table>
 </div><div class="memdoc">
 
+<p>CUDA kernel for a single à trous filter pass. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">type</td><td>Memory/layout strategy. </td></tr>
+    <tr><td class="paramname">T</td><td>Pixel type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>Input buffer. </td></tr>
+    <tr><td class="paramname">out</td><td>Output buffer. </td></tr>
+    <tr><td class="paramname">level</td><td>Current pyramid level. </td></tr>
+    <tr><td class="paramname">frame</td><td><a class="el" href="structGBuffer.html" title="Generic G-buffer storing multiple render targets.">GBuffer</a> with auxiliary buffers. </td></tr>
+    <tr><td class="paramname">params</td><td>Filter configuration parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>None. </dd></dl>
+
 </div>
 </div>
-<a id="a1f885b5ccf7ca2524670f396de814ab9" name="a1f885b5ccf7ca2524670f396de814ab9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f885b5ccf7ca2524670f396de814ab9">&#9670;&#160;</a></span>atrousFilterPixel()</h2>
+<a id="ac963612881f35ab82311f65c59d73fc5" name="ac963612881f35ab82311f65c59d73fc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac963612881f35ab82311f65c59d73fc5">&#9670;&#160;</a></span>atrousFilterPixel()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a> engine, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cuh.html#aa27f8fb35f3de4f2010d1777408b785d">FilterTile</a> tile, <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">typename</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> &gt; </div>
+template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903e1">FilterEngine</a> engine, <a class="el" href="filter_8cuh.html#a7ef0ab496f57e183b484e62e2053c94f">FilterType</a> type, <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">typename</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">void</a> atrousFilterPixel </td>
+          <td class="memname"><a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">void</a> atrousFilterPixel </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int2</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
           <td class="paramname"><em>pos</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">const</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">const</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> *&#160;</td>
           <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">const</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> *&#160;</td>
-          <td class="paramname"><em>cache</em>, </td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> *&#160;</td>
+          <td class="paramname"><em>tile</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structGBuffer.html">GBuffer</a>&lt; <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="structGBuffer.html">GBuffer</a>&lt; <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> &gt;&#160;</td>
           <td class="paramname"><em>frame</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structFilterParams.html">FilterParams</a>&#160;</td>
-          <td class="paramname"><em>paramsparams</em> = <code><a class="el" href="structFilterParams.html">FilterParams</a>()</code>&#160;</td>
+          <td class="paramname"><em>params</em> = <code><a class="el" href="structFilterParams.html">FilterParams</a>()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -639,6 +677,29 @@ template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Computes filtered pixel value for à trous pipeline. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">engine</td><td>CPU or CUDA backend. </td></tr>
+    <tr><td class="paramname">type</td><td>Memory/layout strategy. </td></tr>
+    <tr><td class="paramname">T</td><td>Pixel type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>Pixel position. </td></tr>
+    <tr><td class="paramname">in</td><td>Input buffer. </td></tr>
+    <tr><td class="paramname">out</td><td>Output buffer. </td></tr>
+    <tr><td class="paramname">tile</td><td>Optional tile buffer (used in TILE/ALIGNED modes). </td></tr>
+    <tr><td class="paramname">level</td><td>Current pyramid level. </td></tr>
+    <tr><td class="paramname">frame</td><td><a class="el" href="structGBuffer.html" title="Generic G-buffer storing multiple render targets.">GBuffer</a> containing auxiliary buffers. </td></tr>
+    <tr><td class="paramname">params</td><td>Filter configuration parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>None. </dd></dl>
 
 </div>
 </div>
@@ -648,24 +709,24 @@ template&lt;<a class="el" href="filter_8cuh.html#afb77ec50b20ef0d956ee5b89266903
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">typename</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> &gt; </div>
+template&lt;<a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">typename</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> * getLevelBuffer </td>
+          <td class="memname"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> * getLevelBuffer </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int</a>&#160;</td>
           <td class="paramname"><em>depth</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structGBuffer.html">GBuffer</a>&lt; <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="structGBuffer.html">GBuffer</a>&lt; <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> &gt;&#160;</td>
           <td class="paramname"><em>frame</em>&#160;</td>
         </tr>
         <tr>
@@ -676,6 +737,28 @@ template&lt;<a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed
       </table>
 </div><div class="memdoc">
 
+<p>Selects the appropriate buffer for a given pyramid level. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Buffer element type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">level</td><td>Current pyramid level. </td></tr>
+    <tr><td class="paramname">depth</td><td>Maximum pyramid depth. </td></tr>
+    <tr><td class="paramname">frame</td><td><a class="el" href="structGBuffer.html" title="Generic G-buffer storing multiple render targets.">GBuffer</a> containing render, denoised, and working buffers. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the selected buffer for the given level.</dd></dl>
+<p>Level mapping:</p><ul>
+<li>level 0 → frame.render (base image)</li>
+<li>(level % 2 == depth % 2) → frame.denoised</li>
+<li>otherwise → frame.buffer </li>
+</ul>
+
 </div>
 </div>
 <a id="a3ccd963450fa7fdfa976869600c1718a" name="a3ccd963450fa7fdfa976869600c1718a"></a>
@@ -685,9 +768,9 @@ template&lt;<a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">float</a> luminance </td>
+          <td class="memname"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">float</a> luminance </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">float3</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">float3</a>&#160;</td>
           <td class="paramname"><em>f</em></td><td>)</td>
           <td></td>
         </tr>
@@ -705,36 +788,155 @@ template&lt;<a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed
 
 </div>
 </div>
+<a id="a7be62dbffdfa6eadced2b1b1067322b6" name="a7be62dbffdfa6eadced2b1b1067322b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7be62dbffdfa6eadced2b1b1067322b6">&#9670;&#160;</a></span>saveTile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a80c9ee42937de0e8bfc1eb84e9a83701">CUDA_FUNC</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">void</a> saveTile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">uchar4</a> *&#160;</td>
+          <td class="paramname"><em>tile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
+          <td class="paramname"><em>tileShape</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">const</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">uchar4</a> *&#160;</td>
+          <td class="paramname"><em>img</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
+          <td class="paramname"><em>imgShape</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
+          <td class="paramname"><em>tileStartPos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies a rectangular tile from an image into a tile buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tile</td><td>Destination tile buffer. </td></tr>
+    <tr><td class="paramname">tileShape</td><td>Dimensions of the tile (width, height). </td></tr>
+    <tr><td class="paramname">img</td><td>Source image buffer. </td></tr>
+    <tr><td class="paramname">imgShape</td><td>Dimensions of the source image (width, height). </td></tr>
+    <tr><td class="paramname">tileStartPos</td><td>Top-left coordinate of the tile in the source image. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>None. </dd></dl>
+
+</div>
+</div>
+<a id="a4b57a3d0daaa68e72ad60323bcc22c25" name="a4b57a3d0daaa68e72ad60323bcc22c25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b57a3d0daaa68e72ad60323bcc22c25">&#9670;&#160;</a></span>saveTileAligned()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a80c9ee42937de0e8bfc1eb84e9a83701">CUDA_FUNC</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">void</a> saveTileAligned </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">uchar4</a> *&#160;</td>
+          <td class="paramname"><em>tile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
+          <td class="paramname"><em>tileShape</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">const</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">uchar4</a> *&#160;</td>
+          <td class="paramname"><em>img</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
+          <td class="paramname"><em>imgShape</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
+          <td class="paramname"><em>tileStartPos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies a rectangular tile using alignment-optimized memory access. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tile</td><td>Destination tile buffer (assumed aligned layout). </td></tr>
+    <tr><td class="paramname">tileShape</td><td>Dimensions of the tile (width, height). </td></tr>
+    <tr><td class="paramname">img</td><td>Source image buffer. </td></tr>
+    <tr><td class="paramname">imgShape</td><td>Dimensions of the source image (width, height). </td></tr>
+    <tr><td class="paramname">tileStartPos</td><td>Top-left coordinate of the tile in the source image. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>None.</dd></dl>
+<p>Optimized variant assuming row alignment or padding constraints. </p>
+
+</div>
+</div>
 <a id="a20994b2e1749ae71dbb4ad591ff59738" name="a20994b2e1749ae71dbb4ad591ff59738"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a20994b2e1749ae71dbb4ad591ff59738">&#9670;&#160;</a></span>variance()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">typename</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> &gt; </div>
+template&lt;<a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">typename</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">float</a> variance </td>
+          <td class="memname"><a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">float</a> variance </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int2</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
           <td class="paramname"><em>pos</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">const</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">T</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">const</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">T</a> *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int2</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
           <td class="paramname"><em>shape</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int</a>&#160;</td>
           <td class="paramname"><em>level</em>&#160;</td>
         </tr>
         <tr>
@@ -746,16 +948,23 @@ template&lt;<a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed
 </div><div class="memdoc">
 
 <p>Estimates local luminance variance using an à trous sampling pattern. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">framePos</td><td>Current pixel position. </td></tr>
-    <tr><td class="paramname">in</td><td>Pointer to input image. </td></tr>
-    <tr><td class="paramname">shape</td><td><a class="el" href="structImage.html" title="CPU image container storing raw pixel data.">Image</a> dimension. </td></tr>
-    <tr><td class="paramname">level</td><td>Current à trous level. </td></tr>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Pixel type. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Estimated variance of luminance in the neighborhood. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>Pixel position. </td></tr>
+    <tr><td class="paramname">in</td><td>Input image buffer. </td></tr>
+    <tr><td class="paramname">shape</td><td><a class="el" href="structImage.html" title="CPU image container storing raw pixel data.">Image</a> dimensions. </td></tr>
+    <tr><td class="paramname">level</td><td>Current à trous level (controls sampling radius). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Estimated local variance.</dd></dl>
+<p>Used for edge-awareness and adaptive smoothing. </p>
 
 </div>
 </div>
@@ -766,9 +975,9 @@ template&lt;<a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">float</a> waveletCoef </td>
+          <td class="memname"><a class="el" href="cuda__utils_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="cuda__utils_8h.html#a77e497ee39b740e0efbd9cd253b7744c">CUDA_CPU_FUNC</a> <a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">float</a> waveletCoef </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="filter_8cu.html#a050e2c2f6562ba2fbf0565532d655ed4">int2</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="filter_8cu.html#adbb86b528991f971707789c817f8a6a2">int2</a>&#160;</td>
           <td class="paramname"><em>pos</em></td><td>)</td>
           <td></td>
         </tr>
