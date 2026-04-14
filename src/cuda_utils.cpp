@@ -2,7 +2,6 @@
 
 #include <cuda_runtime.h>
 
-
 void printGPUProperties(){
     cudaDeviceProp prop;
     int device;

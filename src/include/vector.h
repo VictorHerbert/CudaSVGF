@@ -1,17 +1,21 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <string>
-#include <vector>
-//#include <stdio.h>
+/// @file vector.h
+/// @brief CPU and CUDA vector abstractions for host-device memory management.
 
-#include <cuda_runtime.h>
+#include <string>
 #include <vector>
 #include <stdexcept>
 
+#include <cuda_runtime.h>
+
+/// @brief Alias for CPU-side vector storage.
 template <typename T>
 using CpuVector = std::vector<T>;
 
+/// @brief CUDA-managed dynamic array.
+/// @tparam T Element type stored in device memory.
 template <typename T>
 struct CudaVector {
 private:
@@ -19,32 +23,38 @@ private:
     size_t size_p;
 
 public:
+    /// @brief Default empty constructor.
     CudaVector();
 
+    /// @brief Allocates device memory for a given number of elements.
     CudaVector(size_t size);
 
-    CudaVector(T* v, size_t size);
-
-    CudaVector(CpuVector<T>& v);
-
+    /// @brief Device pointer accessor.
+    /// @return Raw pointer to device memory.
     T* data();
 
-    const T* data() const;
-
-    size_t size() const;
-
+    /// @brief Reallocates device memory.
+    /// Frees existing memory if allocated.
+    /// @param size New size in elements.
     void resize(size_t size);
 
-    void copyFrom(T* v, size_t size);
+    /// @brief Copies data from host to device (asynchronous).
+    /// @param v Host source pointer.
+    /// @param size Number of elements to copy.
+    /// @param stream CUDA stream for async execution.
+    void copyFromAsync(T* v, size_t size, cudaStream_t stream=0);
 
-    void copyFromAsync(T* v, size_t size, cudaStream_t stream);
+    /// @brief Copies data from device to host (asynchronous).
+    /// @param v Host destination pointer.
+    /// @param stream CUDA stream for async execution.
+    void copyToAsync(T* v, cudaStream_t stream=0);
 
-    void copyTo(T* v);
-
-    void copyToAsync(T* v, cudaStream_t stream);
-
+    /// @brief Destructor.
+    /// Frees device memory if allocated.
     ~CudaVector();
 };
+
+// ===================== Implementation =====================
 
 template <typename T>
 CudaVector<T>::CudaVector() : size_p(0), data_p(nullptr) {}
@@ -52,82 +62,52 @@ CudaVector<T>::CudaVector() : size_p(0), data_p(nullptr) {}
 template <typename T>
 CudaVector<T>::CudaVector(size_t size) : size_p(size) {
     cudaMalloc(&data_p, size_p * sizeof(T));
-    //printf("cudaMalloc at %p\n", data_p);
 }
 
 template <typename T>
-CudaVector<T>::CudaVector(T* v, size_t size) : size_p(size) {
-    cudaMalloc(&data_p, size_p * sizeof(T));
-    cudaMemcpy(data_p, v, size_p * sizeof(T), cudaMemcpyHostToDevice);
-    //printf("cudaMalloc at %p\n", data_p);
-}
-
-template <typename T>
-CudaVector<T>::CudaVector(CpuVector<T>& v) : CudaVector(v.data(), v.size()) {}
-
-template <typename T>
-T* CudaVector<T>::data() {return data_p;}
-
-template <typename T>
-const T* CudaVector<T>::data() const {return data_p;}
-
-template <typename T>
-size_t CudaVector<T>::size() const {return size_p;}
+T* CudaVector<T>::data() { return data_p; }
 
 template <typename T>
 void CudaVector<T>::resize(size_t newSize) {
-    if (data_p){
+    if (data_p) {
         cudaFree(data_p);
-        
-        #ifdef MEM_DEBUG
-        printf("cudaFree at %p\n", data_p);
-        #endif
     }
+
     CUDA_ERROR_CHECK(cudaMalloc(&data_p, newSize * sizeof(T)));
-
-    #ifdef MEM_DEBUG
-    printf("cudaMalloc at %p\n", data_p);
-    #endif
-
     size_p = newSize;
 }
 
-template <typename T>
-void CudaVector<T>::copyFrom(T* v, size_t size) {
-    if (size > size_p)
-        throw std::runtime_error("Size mismatch");
-    
-    CUDA_ERROR_CHECK(cudaMemcpy(data_p, v, size * sizeof(T), cudaMemcpyHostToDevice));
-}
 
 template <typename T>
 void CudaVector<T>::copyFromAsync(T* v, size_t size, cudaStream_t stream) {
     if (size > size_p)
         throw std::runtime_error("Size mismatch");
-    
-    CUDA_ERROR_CHECK(cudaMemcpyAsync(data_p, v, size * sizeof(T), cudaMemcpyHostToDevice, stream));
+
+    CUDA_ERROR_CHECK(cudaMemcpyAsync(
+        data_p,
+        v,
+        size * sizeof(T),
+        cudaMemcpyHostToDevice,
+        stream
+    ));
 }
 
 template <typename T>
-void CudaVector<T>::copyTo(T *v) {
-    CUDA_ERROR_CHECK(cudaMemcpy(v, data_p, sizeof(T) * size_p, cudaMemcpyDeviceToHost));
-}
-
-template <typename T>
-void CudaVector<T>::copyToAsync(T *v, cudaStream_t stream) {
-    CUDA_ERROR_CHECK(cudaMemcpyAsync(v, data_p, sizeof(T) * size_p, cudaMemcpyDeviceToHost, stream));
+void CudaVector<T>::copyToAsync(T* v, cudaStream_t stream) {
+    CUDA_ERROR_CHECK(cudaMemcpyAsync(
+        v,
+        data_p,
+        sizeof(T) * size_p,
+        cudaMemcpyDeviceToHost,
+        stream
+    ));
 }
 
 template <typename T>
 CudaVector<T>::~CudaVector() {
-    if(data_p){
+    if (data_p) {
         cudaFree(data_p);
-        
-        #ifdef MEM_DEBUG
-        printf("cudaFree at %p\n", data_p);
-        #endif
     }
 }
-
 
 #endif

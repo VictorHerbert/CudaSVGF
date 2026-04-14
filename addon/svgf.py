@@ -7,6 +7,7 @@ bl_info = {
 import bpy
 import subprocess
 import os
+import time
 
 
 # ----------------------------
@@ -31,8 +32,7 @@ def setup_compositor(output_path):
     slots = {
         "Render": "Image",
         "Normal": "Normal",
-        "Albedo": "DiffCol",
-        "Depth": "Depth"
+        "Albedo": "DiffCol"
     }
 
     for slot_name in slots:
@@ -46,7 +46,7 @@ def setup_compositor(output_path):
     for slot_name, output_name in slots.items():
         tree.links.new(rlayers.outputs[output_name], file_output.inputs[slot_name])
 
-    tree.links.new(rlayers.outputs["Image"], composite.inputs["Image"])
+    #tree.links.new(rlayers.outputs["Image"], composite.inputs["Image"])
 
 
 # ----------------------------
@@ -74,11 +74,10 @@ def run_cuda_svgf(props):
         str(res_y),
         str(props.depth),
         str(frame_count),
-        str(props.sigma_spatial),
-        str(props.sigma_render),
         str(props.sigma_albedo),
         str(props.sigma_normal),
     ]
+
 
     result = subprocess.run(args, capture_output=True, text=True)
 
@@ -94,10 +93,10 @@ def run_cuda_svgf(props):
 
 class CudaSVGFProps(bpy.types.PropertyGroup):
 
-    sigma_spatial: bpy.props.FloatProperty(name="Sigma Spatial", min=1, max=10.0, default=1)
-    sigma_render: bpy.props.FloatProperty(name="Sigma Render", min=5, max=30.0, default=5)
-    sigma_albedo: bpy.props.FloatProperty(name="Sigma Albedo", min=0.05, max=0.25, default=0.05)
-    sigma_normal: bpy.props.FloatProperty(name="Sigma Normal", min=0.01, max=0.1, default=0.01)
+    #sigma_spatial: bpy.props.FloatProperty(name="Sigma Spatial", min=0.0001, max=10.0, default=1)
+    #sigma_render: bpy.props.FloatProperty(name="Sigma Render", min=0.0001, max=30.0, default=5)
+    sigma_albedo: bpy.props.FloatProperty(name="Sigma Albedo", min=0.0001, max=10, default=0.05)
+    sigma_normal: bpy.props.FloatProperty(name="Sigma Normal", min=0.0001, max=10, default=0.01)
 
     depth: bpy.props.IntProperty(name="Depth", min=1, max=64, default=8)
 
@@ -126,10 +125,15 @@ class CUDASVGF_OT_denoise(bpy.types.Operator):
 
     def execute(self, context):
         props = context.scene.cudasvgf_props
+        start = time.perf_counter()
         code = run_cuda_svgf(props)
+        end = time.perf_counter()
+        runtime = end - start
 
         if code == 0:
-            self.report({'INFO'}, "CudaSVGF finished successfully")
+            scene = bpy.context.scene
+            frame_count = scene.frame_end - scene.frame_start + 1
+            self.report({'INFO'}, f"CudaSVGF done {frame_count} frames in {int(runtime*1000)} ms")
         else:
             self.report({'ERROR'}, "CudaSVGF failed")
 
@@ -156,14 +160,8 @@ class CUDASVGF_PT_panel(bpy.types.Panel):
         props = context.scene.cudasvgf_props
 
         layout.label(text="SVGF Parameters")
-        layout.prop(props, "sigma_spatial")
-        layout.prop(props, "sigma_render")
         layout.prop(props, "sigma_albedo")
         layout.prop(props, "sigma_normal")
-
-        layout.separator()
-
-        layout.label(text="Pipeline")
         layout.prop(props, "depth")
 
         layout.separator()

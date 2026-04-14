@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     if(argc == 2 && strcmp(argv[1], "-t") == 0){
         test();
     }
-    else if(argc == 10) {
+    else if(argc == 8) {
         int2 shape;
         int depth;
         int frameCount;
@@ -22,10 +22,10 @@ int main(int argc, char* argv[]) {
         std::cout << "shape.y       = " << argv[3] << "\n";
         std::cout << "depth         = " << argv[4] << "\n";
         std::cout << "frameCount    = " << argv[5] << "\n";
-        std::cout << "sigmaSpace    = " << argv[6] << "\n";
-        std::cout << "sigmaRender   = " << argv[7] << "\n";
-        std::cout << "sigmaAlbedo   = " << argv[8] << "\n";
-        std::cout << "sigmaNormal   = " << argv[9] << "\n";
+        //std::cout << "sigmaSpace    = " << argv[6] << "\n";
+        //std::cout << "sigmaRender   = " << argv[7] << "\n";
+        std::cout << "sigmaAlbedo   = " << argv[6] << "\n";
+        std::cout << "sigmaNormal   = " << argv[7] << "\n";
         
         try {
             filepath = argv[1];
@@ -35,10 +35,10 @@ int main(int argc, char* argv[]) {
             depth = std::stoi(argv[4]);
             frameCount = std::stoi(argv[5]);
 
-            params.sigmaSpace   = std::stof(argv[6]);
-            params.sigmaRender  = std::stof(argv[7]);
-            params.sigmaAlbedo  = std::stof(argv[8]);
-            params.sigmaNormal  = std::stof(argv[9]);
+            //params.sigmaSpace   = std::stof(argv[6]);
+            //params.sigmaRender  = std::stof(argv[7]);
+            params.sigmaAlbedo  = std::stof(argv[6]);
+            params.sigmaNormal  = std::stof(argv[7]);
         }
         catch (const std::exception& e) {
             std::cerr << e.what() << "\n";
@@ -46,7 +46,8 @@ int main(int argc, char* argv[]) {
         }
 
         try {
-            videoFilterCuda(filepath, shape,frameCount, depth, params);
+            animationFilterCuda(filepath, shape,frameCount, depth, params);
+
             std::cout << "Output at " << filepath << "DenoisedXXXX.png\n";
         }
         catch (const std::exception& e) {
@@ -55,8 +56,8 @@ int main(int argc, char* argv[]) {
         }
     }
     else{
-        printf("Not enough arguments. Expected 9, got %d\n", argc-1);
-        printf("Usage\n %s filepath shape.x shape.y depth frameCount sigmaSpace sigmaRenger sigmaAlbedo sigmaNormal\n",
+        printf("Not enough arguments. Expected 7, got %d\n", argc-1);
+        printf("Usage\n %s filepath shape.x shape.y depth frameCount sigmaAlbedo sigmaNormal\n",
             argv[0]
         );
 

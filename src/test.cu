@@ -16,133 +16,117 @@ void test() {
 // --------------------------------------------------------------------------------------------------------------
 
     CHECK("device_stats", [&]{
-        SKIP();
         printGPUProperties();
     });
 
 // --------------------------------------------------------------------------------------------------------------
 
     int2 shape = {1920, 1080};
-    //int2 shape = {512, 512};
 
     auto blockSizes = {dim3(32), dim3(32, 2), dim3(32, 4)};
-    auto depths = {1,2,5,10};
-
-    int depth = 2;
+    int depth = 4;
 
 //--------------------------------------------------------------------------------------------------------------
 
     CHECK("cpu_atrous", [&]{
         SKIP();
-        CpuGFrame<uchar3> cpuFrame(shape);
+
+        CpuGBuffer<uchar3> cpuFrame(shape);
 
         BENCH("cpu_atrous", [&]{
-            atrousFilterCpu(cpuFrame, 5);
+            atrousFilter<CPU, BASE, uchar3>(cpuFrame, 5);
         });
 
     });
 
 // --------------------------------------------------------------------------------------------------------------
 
-    CHECK("cuda_atrous_no_opt", [&]{
+    CHECK("cuda_atrous_u3", [&]{
         SKIP();
-
-        CudaGFrame<uchar3> frame(shape);
+        CudaGBuffer<uchar3> frame(shape);
 
         for(dim3 blockSize : blockSizes){
             dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-
-            BENCH("cuda_atrous_no_opt dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
-                atrousFilterCudaKernelNoOpt<<<gridSize, blockSize>>>(frame.render, frame.denoised, depth, frame);
+            BENCH("cuda_atrous_u3 dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
+                atrousFilterCudaPass<BASE><<<gridSize, blockSize>>>(frame.render, frame.denoised, depth, frame);
+                CUDA_KERNEL_ERROR_CHECK();
                 cudaDeviceSynchronize();
             });
         }
     });
 
-    CHECK("cuda_atrous_base", [&]{
+// --------------------------------------------------------------------------------------------------------------
+
+
+    CHECK("cuda_atrous_u4", [&]{
         SKIP();
 
-        CudaGFrame<uchar3> frame(shape);
+        CudaGBuffer<uchar4> frame(shape);
 
         for(dim3 blockSize : blockSizes){
             dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
 
-            BENCH("cuda_atrous_base dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
-                atrousFilterCudaKernelBase<<<gridSize, blockSize>>>(frame.render, frame.denoised, depth, frame);
+            BENCH("cuda_atrous_u4 dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
+                atrousFilterCudaPass<BASE><<<gridSize, blockSize>>>(frame.render, frame.denoised, depth, frame);
+                CUDA_KERNEL_ERROR_CHECK();
                 cudaDeviceSynchronize();
             });
         }
     });
 
-    CHECK("cuda_atrous_uchar4", [&]{
-        SKIP();
+// --------------------------------------------------------------------------------------------------------------
 
-        CudaGFrame<uchar4> frame(shape);
-
-        for(dim3 blockSize : blockSizes){
-            dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-
-            BENCH("cuda_atrous_base4 dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
-                atrousFilterCudaKernelU4<<<gridSize, blockSize>>>(frame.render, frame.denoised, depth, frame);
-                cudaDeviceSynchronize();
-            });
-        }
-    });
-
-    CHECK("cuda_atrous_aprox", [&]{
-        SKIP();
-
-        CudaGFrame<uchar4> frame(shape);
-
-        for(dim3 blockSize : blockSizes){
-            dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
-
-            BENCH("cuda_atrous_aprox dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
-                atrousFilterCudaKernelAprox<<<gridSize, blockSize>>>(frame.render, frame.denoised, depth, frame);
-                cudaDeviceSynchronize();
-            });
-        }
-    });
 
     CHECK("cuda_atrous_tile", [&]{
-        SKIP();
+        //SKIP();
 
-        CudaGFrame<uchar4> frame(shape);
+        CudaGBuffer<uchar4> frame(shape);
 
-        for(dim3 blockSize : blockSizes){
-            dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+        for(dim3 blockShape : blockSizes){
+            dim3 gridShape((frame.shape.x + blockShape.x-1) / blockShape.x, (frame.shape.y + blockShape.y-1) / blockShape.y);
 
-            BENCH("cuda_atrous_tile dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
-                int2 tileShape = {blockSize.x + 2*ATROUS_RADIUS*(1<<depth), blockSize.y + 2*ATROUS_RADIUS*(1<<depth)};
-                int tileSize = totalSize(tileShape);
-                int tileBytes = tileSize* sizeof(uchar4);
+            int2 tileShape = {blockShape.x + 2*ATROUS_RADIUS*(1<<depth), blockShape.y + 2*ATROUS_RADIUS*(1<<depth)};
+            int tileSize = totalSize(tileShape);
+            int tileBytes = tileSize*sizeof(uchar4);
 
-                atrousFilterCudaKernelTile<<<gridSize, blockSize, tileBytes>>>(frame.render, frame.denoised, depth, frame);
+            printf("%d KB\n", tileBytes/1024);
+
+            assert(tileBytes < 48*1024);
+
+            BENCH("cuda_atrous_tile dim " + std::to_string(blockShape.x) + " " + std::to_string(blockShape.y), [&]{
+                atrousFilterCudaPass<TILE><<<gridShape, blockShape, tileBytes>>>(frame.render, frame.denoised, depth, frame);
+                CUDA_KERNEL_ERROR_CHECK();
                 cudaDeviceSynchronize();
             });
         }
     });
 
-    CHECK("cuda_atrous_tile_aligned", [&]{
-        SKIP();
+// --------------------------------------------------------------------------------------------------------------
 
-        CudaGFrame<uchar4> frame(shape);
 
-        for(dim3 blockSize : blockSizes){
-            dim3 gridSize((shape.x + blockSize.x-1) / blockSize.x, (shape.y + blockSize.y-1) / blockSize.y);
+    CHECK("cuda_atrous_aligned", [&]{
+        //SKIP();
 
-            BENCH("cuda_atrous_tile_aligned dim " + std::to_string(blockSize.x) + " " + std::to_string(blockSize.y), [&]{
-                int2 tileShape = {blockSize.x + 2*ATROUS_RADIUS*(1<<depth), blockSize.y + 2*ATROUS_RADIUS*(1<<depth)};
-                int tileSize = totalSize(tileShape);
-                int tileBytes = tileSize*sizeof(uchar4);
+        CudaGBuffer<uchar4> frame(shape);
 
-                atrousFilterCudaKernelTileAligned<<<gridSize, blockSize, tileBytes>>>(frame.render, frame.denoised, depth, frame);
+        for(dim3 blockShape : blockSizes){
+            dim3 gridShape((frame.shape.x + blockShape.x-1) / blockShape.x, (frame.shape.y + blockShape.y-1) / blockShape.y);
+
+            int2 tileShape = {blockShape.x + 2*ATROUS_RADIUS*(1<<depth), blockShape.y + 2*ATROUS_RADIUS*(1<<depth)};
+            int tileSize = totalSize(tileShape);
+            int tileBytes = tileSize*sizeof(uchar4);
+
+            printf("%d KB\n", tileBytes/1024);
+
+            assert(tileBytes < 48*1024);
+
+            BENCH("cuda_atrous_aligned dim " + std::to_string(blockShape.x) + " " + std::to_string(blockShape.y), [&]{
+                atrousFilterCudaPass<ALIGNED><<<gridShape, blockShape, tileBytes>>>(frame.render, frame.denoised, depth, frame);
+                CUDA_KERNEL_ERROR_CHECK();
                 cudaDeviceSynchronize();
             });
         }
     });
-
-
 
 // --------------------------------------------------------------------------------------------------------------
 
@@ -159,8 +143,9 @@ void test() {
 
     CHECK("video_cuda", [&]{
         SKIP();
-        BENCH("video_cuda_1", [&]{videoFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 1);});
-        BENCH("video_cuda_4", [&]{videoFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 4);});
-        BENCH("video_cuda_8", [&]{videoFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 8);});
+        BENCH("video_cuda_1", [&]{animationFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 1);});
+        BENCH("video_cuda_4", [&]{animationFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 4);});
+        BENCH("video_cuda_8", [&]{animationFilterCuda("render/cornell/", {512, 512}, 10, 5, FilterParams(), 8);});
     });
+
 }
